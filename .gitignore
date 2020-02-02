@@ -2,6 +2,6 @@
 .idea
 
 # kube-prometheus generated files
-prometheus/manifests
-prometheus/vendor
-prometheus/jsonnetfile.lock.json
+kube-prometheus/manifests
+kube-prometheus/vendor
+kube-prometheus/jsonnetfile.lock.json

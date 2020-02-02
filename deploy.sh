@@ -6,30 +6,33 @@ set -o pipefail # Only exit with zero if all commands of the pipeline exit succe
 SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
+EPHEMERAL_ROLES_DIR="${SCRIPT_DIR}/ephemeral-roles"
+KUBE_PROMETHEUS_DIR="${SCRIPT_DIR}/kube-prometheus"
+
 setup() {
   pushd . > /dev/null 2>&1 && cd "${SCRIPT_DIR}"
 }
 
 build() {
   # Build kube-prometheus yaml files
-  "${SCRIPT_DIR}/prometheus/build.sh"
+  "${KUBE_PROMETHEUS_DIR}/build.sh"
 }
 
 deploy() {
   echo "🚀 Applying ephemeral-roles namespace yaml"
-  kubectl apply -f "${SCRIPT_DIR}/ephemeral-roles/ephemeral-roles.yml"
+  kubectl apply -f "${EPHEMERAL_ROLES_DIR}/ephemeral-roles.yml"
 
   echo "🚀 Applying kube-prometheus setup manifest yamls"
-  kubectl apply -f "${SCRIPT_DIR}/prometheus/manifests/setup"
+  kubectl apply -f "${KUBE_PROMETHEUS_DIR}/manifests/setup"
 
   echo "🚀 Waiting for kube-prometheus setup to finish"
   until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
 
   echo "🚀 Applying kube-prometheus manifest yamls"
-  kubectl apply -f "${SCRIPT_DIR}/prometheus/manifests"
+  kubectl apply -f "${KUBE_PROMETHEUS_DIR}/manifests"
 
   echo "🚀 Applying ephemeral-roles servicemonitor yaml"
-  kubectl apply -f "${SCRIPT_DIR}/prometheus/servicemonitor-ephemeral-roles.yaml"
+  kubectl apply -f "${KUBE_PROMETHEUS_DIR}/servicemonitor-ephemeral-roles.yaml"
 }
 
 cleanup() {
