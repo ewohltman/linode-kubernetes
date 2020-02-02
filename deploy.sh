@@ -14,7 +14,6 @@ setup() {
 }
 
 build() {
-  # Build kube-prometheus yaml files
   "${KUBE_PROMETHEUS_DIR}/build.sh"
 }
 
