@@ -1,0 +1,7 @@
+# IDE specific metadata
+.idea
+
+# kube-prometheus generated files
+prometheus/manifests
+prometheus/vendor
+prometheus/jsonnetfile.lock.json
