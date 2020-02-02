@@ -20,7 +20,7 @@ build() {
 
 deploy() {
   echo "🚀 Applying ephemeral-roles namespace yaml"
-  kubectl apply -f "${EPHEMERAL_ROLES_DIR}/ephemeral-roles.yml"
+  kubectl apply -f "${EPHEMERAL_ROLES_DIR}/ephemeral-roles.yaml"
 
   echo "🚀 Applying kube-prometheus setup manifest yamls"
   kubectl apply -f "${KUBE_PROMETHEUS_DIR}/manifests/setup"
