@@ -17,3 +17,6 @@ kubectl apply -f "${SCRIPT_DIR}/manifests"
 
 echo "🚀 Applying ephemeral-roles servicemonitor yaml"
 kubectl apply -f "${SCRIPT_DIR}/servicemonitor-ephemeral-roles.yaml"
+
+echo "🚀 Applying Grafana LoadBalancer service"
+kubectl apply -f "${SCRIPT_DIR}/grafana-external.yaml"
