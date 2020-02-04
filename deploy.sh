@@ -7,6 +7,7 @@ SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
 EPHEMERAL_ROLES_DIR="${SCRIPT_DIR}/ephemeral-roles"
+EFK_DIR="${SCRIPT_DIR}/efk"
 KUBE_PROMETHEUS_DIR="${SCRIPT_DIR}/kube-prometheus"
 
 setup() {
@@ -18,20 +19,9 @@ build() {
 }
 
 deploy() {
-  echo "🚀 Applying ephemeral-roles namespace yaml"
-  kubectl apply -f "${EPHEMERAL_ROLES_DIR}/ephemeral-roles.yaml"
-
-  echo "🚀 Applying kube-prometheus setup manifest yamls"
-  kubectl apply -f "${KUBE_PROMETHEUS_DIR}/manifests/setup"
-
-  echo "🚀 Waiting for kube-prometheus setup to finish"
-  until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
-
-  echo "🚀 Applying kube-prometheus manifest yamls"
-  kubectl apply -f "${KUBE_PROMETHEUS_DIR}/manifests"
-
-  echo "🚀 Applying ephemeral-roles servicemonitor yaml"
-  kubectl apply -f "${KUBE_PROMETHEUS_DIR}/servicemonitor-ephemeral-roles.yaml"
+  "${EPHEMERAL_ROLES_DIR}/deploy.sh"
+  "${EFK_DIR}/deploy.sh"
+  "${KUBE_PROMETHEUS_DIR}/deploy.sh"
 }
 
 cleanup() {
