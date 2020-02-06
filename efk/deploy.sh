@@ -20,3 +20,6 @@ kubectl -n logging rollout status deployment/kibana
 echo "🚀 Deploying Fluentd"
 kubectl apply -f "${SCRIPT_DIR}/fluentd.yaml"
 kubectl -n logging rollout status daemonset/fluentd
+
+echo "🚀 Deploying Grafana Contour HTTPProxy"
+kubectl apply -f "${SCRIPT_DIR}/kibana-httpproxy.yaml"

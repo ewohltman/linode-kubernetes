@@ -6,17 +6,17 @@ set -o pipefail # Only exit with zero if all commands of the pipeline exit succe
 SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
-echo "🚀 Applying kube-prometheus setup manifest yamls"
+echo "🚀 Deploying kube-prometheus setup manifest yamls"
 kubectl apply -f "${SCRIPT_DIR}/manifests/setup"
 
 echo "🚀 Waiting for kube-prometheus setup to finish"
 until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
 
-echo "🚀 Applying kube-prometheus manifest yamls"
+echo "🚀 Deploying kube-prometheus manifest yamls"
 kubectl apply -f "${SCRIPT_DIR}/manifests"
 
-echo "🚀 Applying ephemeral-roles servicemonitor yaml"
+echo "🚀 Deploying ephemeral-roles ServiceMonitor"
 kubectl apply -f "${SCRIPT_DIR}/servicemonitor-ephemeral-roles.yaml"
 
-echo "🚀 Applying Grafana LoadBalancer service"
-kubectl apply -f "${SCRIPT_DIR}/grafana-external.yaml"
+echo "🚀 Deploying Grafana Contour HTTPProxy"
+kubectl apply -f "${SCRIPT_DIR}/grafana-httpproxy.yaml"

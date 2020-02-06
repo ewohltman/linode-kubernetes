@@ -7,6 +7,7 @@ SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
 EPHEMERAL_ROLES_DIR="${SCRIPT_DIR}/ephemeral-roles"
+CONTOUR_DIR="${SCRIPT_DIR}/contour"
 EFK_DIR="${SCRIPT_DIR}/efk"
 KUBE_PROMETHEUS_DIR="${SCRIPT_DIR}/kube-prometheus"
 
@@ -20,6 +21,7 @@ build() {
 
 deploy() {
   "${EPHEMERAL_ROLES_DIR}/deploy.sh"
+  "${CONTOUR_DIR}/deploy.sh"
   "${EFK_DIR}/deploy.sh"
   "${KUBE_PROMETHEUS_DIR}/deploy.sh"
 }

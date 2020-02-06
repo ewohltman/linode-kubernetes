@@ -1,0 +1,13 @@
+kind: HTTPProxy
+apiVersion: projectcontour.io/v1
+metadata:
+  name: grafana-httpproxy
+  namespace: monitoring
+spec:
+  routes:
+    - services:
+        - name: grafana
+          port: 3000
+      pathRewritePolicy:
+        replacePrefix:
+          - replacement: /

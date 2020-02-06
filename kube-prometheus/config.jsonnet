@@ -11,7 +11,7 @@ local kp =
       namespace: 'monitoring',
 
       prometheus+:: {
-        namespaces+: ['kube-system', 'monitoring', 'ephemeral-roles'],
+        namespaces+: ['kube-system', 'monitoring', 'projectcontour', 'ephemeral-roles'],
       },
       
       grafana+:: {
