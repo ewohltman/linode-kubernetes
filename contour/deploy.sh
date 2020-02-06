@@ -9,5 +9,5 @@ SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 echo "🚀 Deploying Contour"
 kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
 
-echo "🚀 Deploying HTTPProxy"
+echo "🚀 Deploying ephemeral-roles.net HTTPProxy"
 kubectl apply -f "${SCRIPT_DIR}/httpproxy.yaml"
