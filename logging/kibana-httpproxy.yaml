@@ -8,6 +8,3 @@ spec:
     - services:
         - name: kibana
           port: 80
-      pathRewritePolicy:
-        replacePrefix:
-          - replacement: /app/kibana

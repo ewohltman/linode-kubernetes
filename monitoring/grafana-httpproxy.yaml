@@ -8,6 +8,3 @@ spec:
     - services:
         - name: grafana
           port: 3000
-      pathRewritePolicy:
-        replacePrefix:
-          - replacement: /
