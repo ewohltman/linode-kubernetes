@@ -1,0 +1,11 @@
+kind: HTTPProxy
+apiVersion: projectcontour.io/v1
+metadata:
+  name: grafana-httpproxy
+  namespace: projectcontour
+spec:
+  virtualhost:
+    fqdn: grafana.ephemeral-roles.net
+  includes:
+    - name: grafana-httpproxy
+      namespace: monitoring

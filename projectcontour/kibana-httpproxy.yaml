@@ -1,0 +1,11 @@
+kind: HTTPProxy
+apiVersion: projectcontour.io/v1
+metadata:
+  name: kibana-httpproxy
+  namespace: projectcontour
+spec:
+  virtualhost:
+    fqdn: kibana.ephemeral-roles.net
+  includes:
+    - name: kibana-httpproxy
+      namespace: logging
