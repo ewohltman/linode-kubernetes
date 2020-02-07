@@ -6,7 +6,6 @@ set -o pipefail # Only exit with zero if all commands of the pipeline exit succe
 SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
-EPHEMERAL_ROLES_DIR="${SCRIPT_DIR}/ephemeral-roles"
 PROJECTCONTOUR_DIR="${SCRIPT_DIR}/projectcontour"
 LOGGING_DIR="${SCRIPT_DIR}/logging"
 MONITORING_DIR="${SCRIPT_DIR}/monitoring"
@@ -20,7 +19,6 @@ build() {
 }
 
 deploy() {
-  "${EPHEMERAL_ROLES_DIR}/deploy.sh"
   "${PROJECTCONTOUR_DIR}/deploy.sh"
   "${LOGGING_DIR}/deploy.sh"
   "${MONITORING_DIR}/deploy.sh"
