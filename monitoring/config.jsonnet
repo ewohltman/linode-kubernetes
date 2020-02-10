@@ -1,47 +1,45 @@
 local kp =
   (import 'kube-prometheus/kube-prometheus.libsonnet') +
-  // Uncomment the following imports to enable its patches
   (import 'kube-prometheus/kube-prometheus-anti-affinity.libsonnet') +
-  // (import 'kube-prometheus/kube-prometheus-managed-cluster.libsonnet') +
-  // (import 'kube-prometheus/kube-prometheus-node-ports.libsonnet') +
-  // (import 'kube-prometheus/kube-prometheus-static-etcd.libsonnet') +
-  // (import 'kube-prometheus/kube-prometheus-thanos-sidecar.libsonnet') +
   {
+    grafanaDashboards+:: {
+      'ephemeral-roles-dashboard.json': (import 'ephemeral-roles-dashboard.json'),
+    },
+
     _config+:: {
       namespace: 'monitoring',
 
       prometheus+:: {
         namespaces+: ['kube-system', 'monitoring', 'projectcontour', 'ephemeral-roles'],
+        serviceMonitorEphemeralRoles: {
+          apiVersion: 'monitoring.coreos.com/v1',
+          kind: 'ServiceMonitor',
+          metadata: {
+            name: 'ephemeral-roles',
+            namespace: 'ephemeral-roles',
+          },
+          spec: {
+            jobLabel: 'app',
+            endpoints: [
+              {
+                port: 'http',
+              },
+            ],
+            selector: {
+              matchLabels: {
+                app: 'ephemeral-roles',
+              },
+            },
+          },
+        },
       },
-      
+
+
+
       grafana+:: {
         config: { // http://docs.grafana.org/installation/configuration/
           sections: {
             "auth.anonymous": {enabled: true},
-          },
-        },
-      },
-    },
-
-    prometheus+:: {
-      serviceMonitorEphemeralRoles: {
-        apiVersion: 'monitoring.coreos.com/v1',
-        kind: 'ServiceMonitor',
-        metadata: {
-          name: 'ephemeral-roles',
-          namespace: 'ephemeral-roles',
-        },
-        spec: {
-          jobLabel: 'app',
-          endpoints: [
-            {
-              port: 'http',
-            },
-          ],
-          selector: {
-            matchLabels: {
-              app: 'ephemeral-roles',
-            },
           },
         },
       },
