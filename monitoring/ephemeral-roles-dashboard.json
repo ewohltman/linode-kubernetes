@@ -15,7 +15,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 27,
   "links": [],
   "panels": [
     {
@@ -86,7 +85,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "uptime",
           "color": "#37872D"
         }
       ],
@@ -98,6 +97,7 @@
           "expr": "up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "uptime",
           "refId": "A"
         }
       ],
@@ -180,7 +180,7 @@
         "current": true,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -197,7 +197,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "servers",
           "color": "#C4162A"
         }
       ],
@@ -209,6 +209,7 @@
           "expr": "ephemeral_roles_guilds_count",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "servers",
           "refId": "A"
         }
       ],
@@ -260,7 +261,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "prometheus",
-      "decimals": 3,
+      "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -278,7 +279,7 @@
         "max": false,
         "min": false,
         "rightSide": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -295,7 +296,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "users",
           "color": "#C4162A"
         }
       ],
@@ -307,6 +308,7 @@
           "expr": "ephemeral_roles_members_count",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "users",
           "refId": "A"
         }
       ],
@@ -331,7 +333,7 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "short",
+          "format": "none",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -388,7 +390,7 @@
         "current": true,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -405,7 +407,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "events/second",
           "color": "#8F3BB8"
         }
       ],
@@ -417,6 +419,7 @@
           "expr": "irate(ephemeral_roles_voice_state_update_events[1m])",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "events/second",
           "refId": "A"
         }
       ],
@@ -484,7 +487,7 @@
         "current": true,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -501,7 +504,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "events/second",
           "color": "#8F3BB8"
         }
       ],
@@ -513,6 +516,7 @@
           "expr": "irate(ephemeral_roles_message_create_events[1m])",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "events/second",
           "refId": "A"
         }
       ],
@@ -578,6 +582,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "prometheus",
+      "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -590,12 +595,12 @@
       "id": 2,
       "legend": {
         "alignAsTable": true,
-        "avg": false,
+        "avg": true,
         "current": true,
         "max": false,
         "min": false,
         "rightSide": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -612,7 +617,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "usage",
           "color": "#1F60C4"
         }
       ],
@@ -624,6 +629,7 @@
           "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "usage",
           "refId": "A"
         }
       ],
@@ -688,11 +694,11 @@
       "id": 40,
       "legend": {
         "alignAsTable": true,
-        "avg": false,
+        "avg": true,
         "current": true,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -709,12 +715,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
-          "color": "#f4d598",
-          "fill": 0
-        },
-        {
-          "alias": "/go_memstats_heap_objects/",
+          "alias": "objects",
           "color": "#1F60C4",
           "fill": 1
         }
@@ -728,13 +729,8 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
+          "legendFormat": "objects",
           "refId": "A"
-        },
-        {
-          "expr": "avg_over_time(go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}[5m])",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -785,6 +781,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "prometheus",
+      "decimals": 2,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -802,7 +799,8 @@
         "current": true,
         "max": false,
         "min": false,
-        "show": false,
+        "rightSide": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -819,7 +817,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "utilization",
           "color": "#E0B400"
         }
       ],
@@ -833,6 +831,7 @@
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
+          "legendFormat": "utilization",
           "refId": "A"
         }
       ],
@@ -897,11 +896,11 @@
       "id": 42,
       "legend": {
         "alignAsTable": true,
-        "avg": false,
+        "avg": true,
         "current": true,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": true
       },
@@ -918,7 +917,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "/ephemeral-roles/",
+          "alias": "goroutines",
           "color": "#FA6400"
         }
       ],
@@ -930,6 +929,7 @@
           "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "goroutines",
           "refId": "A"
         }
       ],
@@ -937,7 +937,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Goroutines (Threads)",
+      "title": "Goroutines",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1015,5 +1015,5 @@
   "timezone": "",
   "title": "Ephemeral Roles Metrics",
   "uid": "OqANQqtiz",
-  "version": 14
+  "version": 1
 }
