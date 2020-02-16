@@ -618,7 +618,8 @@
       "seriesOverrides": [
         {
           "alias": "/instance/",
-          "color": "#1F60C4"
+          "color": "#1F60C4",
+          "linewidth": 2
         }
       ],
       "spaceLength": 10,
@@ -629,21 +630,21 @@
           "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "instance-1",
+          "legendFormat": "instance 1",
           "refId": "A"
         },
         {
           "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "instance-2",
+          "legendFormat": "instance 2",
           "refId": "B"
         },
         {
           "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "instance-3",
+          "legendFormat": "instance 3",
           "refId": "C"
         }
       ],
@@ -730,7 +731,8 @@
       "seriesOverrides": [
         {
           "alias": "/instance/",
-          "color": "#1F60C4"
+          "color": "#1F60C4",
+          "linewidth": 2
         }
       ],
       "spaceLength": 10,
@@ -742,7 +744,7 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "instance-1",
+          "legendFormat": "instance 1",
           "refId": "A"
         },
         {
@@ -750,7 +752,7 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "instance-2",
+          "legendFormat": "instance 2",
           "refId": "B"
         },
         {
@@ -758,7 +760,7 @@
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "instance-3",
+          "legendFormat": "instance 3",
           "refId": "C"
         }
       ],
@@ -847,7 +849,8 @@
       "seriesOverrides": [
         {
           "alias": "/instance/",
-          "color": "#E0B400"
+          "color": "#E0B400",
+          "linewidth": 2
         }
       ],
       "spaceLength": 10,
@@ -860,7 +863,7 @@
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "instance-1",
+          "legendFormat": "instance 1",
           "refId": "A"
         },
         {
@@ -869,7 +872,7 @@
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "instance-2",
+          "legendFormat": "instance 2",
           "refId": "B"
         },
         {
@@ -878,7 +881,7 @@
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "instance-3",
+          "legendFormat": "instance 3",
           "refId": "C"
         }
       ],
@@ -965,7 +968,8 @@
       "seriesOverrides": [
         {
           "alias": "/instance/",
-          "color": "#FA6400"
+          "color": "#FA6400",
+          "linewidth": 2
         }
       ],
       "spaceLength": 10,
@@ -976,21 +980,21 @@
           "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "instance-1",
+          "legendFormat": "instance 1",
           "refId": "A"
         },
         {
           "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "instance-2",
+          "legendFormat": "instance 2",
           "refId": "B"
         },
         {
           "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "instance-3",
+          "legendFormat": "instance 3",
           "refId": "C"
         }
       ],
@@ -1045,7 +1049,7 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {
