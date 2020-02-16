@@ -94,7 +94,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
+          "expr": "up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "uptime",
@@ -206,7 +206,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ephemeral_roles_guilds_count",
+          "expr": "sum(ephemeral_roles_guilds_count)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "servers",
@@ -305,7 +305,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ephemeral_roles_members_count",
+          "expr": "sum(ephemeral_roles_members_count)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "users",
@@ -416,7 +416,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(ephemeral_roles_voice_state_update_events[1m])",
+          "expr": "sum(irate(ephemeral_roles_voice_state_update_events[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "events/second",
@@ -513,7 +513,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(ephemeral_roles_message_create_events[1m])",
+          "expr": "sum(irate(ephemeral_roles_message_create_events[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "events/second",
@@ -586,7 +586,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 9,
         "w": 12,
         "x": 0,
         "y": 19
@@ -617,7 +617,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "usage",
+          "alias": "/instance/",
           "color": "#1F60C4"
         }
       ],
@@ -626,11 +626,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
+          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "usage",
+          "legendFormat": "instance-1",
           "refId": "A"
+        },
+        {
+          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "instance-2",
+          "refId": "B"
+        },
+        {
+          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "instance-3",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -685,7 +699,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 9,
         "w": 12,
         "x": 12,
         "y": 19
@@ -715,9 +729,8 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "objects",
-          "color": "#1F60C4",
-          "fill": 1
+          "alias": "/instance/",
+          "color": "#1F60C4"
         }
       ],
       "spaceLength": 10,
@@ -725,12 +738,28 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
+          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
-          "legendFormat": "objects",
+          "legendFormat": "instance-1",
           "refId": "A"
+        },
+        {
+          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "instance-2",
+          "refId": "B"
+        },
+        {
+          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
+          "format": "time_series",
+          "hide": false,
+          "intervalFactor": 1,
+          "legendFormat": "instance-3",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -785,10 +814,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 9,
         "w": 12,
         "x": 0,
-        "y": 25
+        "y": 28
       },
       "hiddenSeries": false,
       "id": 18,
@@ -817,7 +846,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "utilization",
+          "alias": "/instance/",
           "color": "#E0B400"
         }
       ],
@@ -826,13 +855,31 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}[1m])",
+          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}[1m])",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "utilization",
+          "legendFormat": "instance-1",
           "refId": "A"
+        },
+        {
+          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}[1m])",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "instance-2",
+          "refId": "B"
+        },
+        {
+          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}[1m])",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "instance-3",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -887,10 +934,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 9,
         "w": 12,
         "x": 12,
-        "y": 25
+        "y": 28
       },
       "hiddenSeries": false,
       "id": 42,
@@ -917,7 +964,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "goroutines",
+          "alias": "/instance/",
           "color": "#FA6400"
         }
       ],
@@ -926,11 +973,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
+          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "goroutines",
+          "legendFormat": "instance-1",
           "refId": "A"
+        },
+        {
+          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "instance-2",
+          "refId": "B"
+        },
+        {
+          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "instance-3",
+          "refId": "C"
         }
       ],
       "thresholds": [],
@@ -984,7 +1045,7 @@
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -1015,5 +1076,5 @@
   "timezone": "",
   "title": "Ephemeral Roles Metrics",
   "uid": "OqANQqtiz",
-  "version": 1
+  "version": 2
 }
