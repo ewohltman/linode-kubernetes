@@ -86,7 +86,8 @@
       "seriesOverrides": [
         {
           "alias": "uptime",
-          "color": "#37872D"
+          "color": "#37872D",
+          "fill": 2
         }
       ],
       "spaceLength": 10,
@@ -94,7 +95,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
+          "expr": "up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "uptime",
@@ -1049,7 +1050,7 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
