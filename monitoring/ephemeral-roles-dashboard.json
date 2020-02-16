@@ -877,7 +877,7 @@
           "refId": "B"
         },
         {
-          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}[1m])",
+          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}[1m])",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1050,7 +1050,7 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
