@@ -1081,7 +1081,7 @@
     "list": []
   },
   "time": {
-    "from": "2020-02-17T17:58:00.000Z",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -1112,5 +1112,5 @@
   "timezone": "",
   "title": "Ephemeral Roles Metrics",
   "uid": "OqANQqtiz",
-  "version": 1
+  "version": 3
 }
