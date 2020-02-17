@@ -20,7 +20,9 @@ build() {
 
 deploy() {
   "${PROJECTCONTOUR_DIR}/deploy.sh"
+  sleep 1
   "${LOGGING_DIR}/deploy.sh"
+  sleep 1
   "${MONITORING_DIR}/deploy.sh"
 }
 
