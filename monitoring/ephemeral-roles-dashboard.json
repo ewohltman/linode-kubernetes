@@ -95,7 +95,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}",
+          "expr": "avg(up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "uptime",
@@ -587,7 +587,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 0,
         "y": 19
@@ -708,7 +708,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 12,
         "y": 19
@@ -832,10 +832,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 0,
-        "y": 28
+        "y": 30
       },
       "hiddenSeries": false,
       "id": 18,
@@ -962,10 +962,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 11,
         "w": 12,
         "x": 12,
-        "y": 28
+        "y": 30
       },
       "hiddenSeries": false,
       "id": 42,
@@ -1081,7 +1081,7 @@
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "2020-02-17T17:58:00.000Z",
     "to": "now"
   },
   "timepicker": {
