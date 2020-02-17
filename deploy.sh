@@ -31,7 +31,7 @@ cleanup() {
 trap cleanup EXIT
 
 setup
-# build
+build
 deploy
 
 echo "🚀 Deployment complete"
