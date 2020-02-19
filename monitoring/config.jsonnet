@@ -30,26 +30,6 @@ local kp =
                 },
             },
 
-            prometheusAlerts+:: {
-                groups+: [
-                    {
-                        name: 'ephemeral-roles',
-                        rules: [
-                            {
-                                alert: 'EphemeralRoles-0-Goroutines',
-                                expr: 'go_goroutines{namespace="ephemeral-roles",service="ephemeral-roles",pod="ephemeral-roles-0" > 1}',
-                                labels: {
-                                    severity: 'critical',
-                                },
-                                annotations: {
-                                    description: 'This is to alert when the number of goroutines exceeds a threshold.',
-                                },
-                            },
-                        ],
-                    },
-                ],
-            },
-
             grafana+:: {
                 config: { // http://docs.grafana.org/installation/configuration/
                     sections: {
@@ -66,7 +46,7 @@ local kp =
                       - name: default-receiver
                       - name: pod-bouncer
                         webhook_configs:
-                          - url: http://pod-bouncer.ephemeral-roles.svc.cluster.local
+                          - url: http://pod-bouncer.ephemeral-roles.svc.cluster.local/alert
                     route:
                       group_by: ['alertname']
                       group_wait: 30s
@@ -79,6 +59,26 @@ local kp =
                           receiver: pod-bouncer
                 |||,
             },
+        },
+
+        prometheusAlerts+:: {
+            groups+: [
+                {
+                    name: 'ephemeral-roles',
+                    rules: [
+                        {
+                            alert: 'EphemeralRoles-0-Goroutines',
+                            expr: 'go_goroutines{namespace="ephemeral-roles",service="ephemeral-roles",pod="ephemeral-roles-0"} > 1',
+                            labels: {
+                                severity: 'critical',
+                            },
+                            annotations: {
+                                description: 'This is to alert when the number of goroutines exceeds a threshold.',
+                            },
+                        },
+                    ],
+                },
+            ],
         },
     };
 
