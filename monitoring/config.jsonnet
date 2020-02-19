@@ -1,50 +1,86 @@
 local kp =
-  (import 'kube-prometheus/kube-prometheus.libsonnet') +
-  (import 'kube-prometheus/kube-prometheus-anti-affinity.libsonnet') +
-  {
-    grafanaDashboards+:: {
-      'ephemeral-roles-dashboard.json': (import 'ephemeral-roles-dashboard.json'),
-    },
+    (import 'kube-prometheus/kube-prometheus.libsonnet') +
+    (import 'kube-prometheus/kube-prometheus-anti-affinity.libsonnet') +
+    {
+        grafanaDashboards+:: {
+            'ephemeral-roles-dashboard.json': (import 'ephemeral-roles-dashboard.json'),
+        },
 
-    _config+:: {
-      namespace: 'monitoring',
+        _config+:: {
+            namespace: 'monitoring',
 
-      prometheus+:: {
-        namespaces+: ['kube-system', 'monitoring', 'projectcontour', 'ephemeral-roles'],
-        serviceMonitorEphemeralRoles: {
-          apiVersion: 'monitoring.coreos.com/v1',
-          kind: 'ServiceMonitor',
-          metadata: {
-            name: 'ephemeral-roles',
-            namespace: 'ephemeral-roles',
-          },
-          spec: {
-            jobLabel: 'app',
-            endpoints: [
-              {
-                port: 'http',
-              },
-            ],
-            selector: {
-              matchLabels: {
-                app: 'ephemeral-roles',
-              },
+            prometheus+:: {
+                namespaces+: ['kube-system', 'monitoring', 'projectcontour', 'ephemeral-roles'],
+                serviceMonitorEphemeralRoles: {
+                    apiVersion: 'monitoring.coreos.com/v1',
+                    kind: 'ServiceMonitor',
+                    metadata: {
+                        name: 'ephemeral-roles',
+                        namespace: 'ephemeral-roles',
+                    },
+                    spec: {
+                        jobLabel: 'app',
+                        endpoints: [{port: 'http'}],
+                        selector: {
+                            matchLabels: {
+                                app: 'ephemeral-roles',
+                            },
+                        },
+                    },
+                },
             },
-          },
+
+            prometheusAlerts+:: {
+                groups+: [
+                    {
+                        name: 'ephemeral-roles',
+                        rules: [
+                            {
+                                alert: 'EphemeralRoles-0-Goroutines',
+                                expr: 'go_goroutines{namespace="ephemeral-roles",service="ephemeral-roles",pod="ephemeral-roles-0" > 1}',
+                                labels: {
+                                    severity: 'critical',
+                                },
+                                annotations: {
+                                    description: 'This is to alert when the number of goroutines exceeds a threshold.',
+                                },
+                            },
+                        ],
+                    },
+                ],
+            },
+
+            grafana+:: {
+                config: { // http://docs.grafana.org/installation/configuration/
+                    sections: {
+                        "auth.anonymous": {enabled: true},
+                    },
+                },
+            },
+
+            alertmanager+: {
+                config: |||
+                    global:
+                      resolve_timeout: 10m
+                    receivers:
+                      - name: default-receiver
+                      - name: pod-bouncer
+                        webhook_configs:
+                          - url: http://pod-bouncer.ephemeral-roles.svc.cluster.local
+                    route:
+                      group_by: ['alertname']
+                      group_wait: 30s
+                      group_interval: 5m
+                      repeat_interval: 30m
+                      receiver: default-receiver
+                      routes:
+                        - match:
+                            alertname: EphemeralRoles-0-Goroutines
+                          receiver: pod-bouncer
+                |||,
+            },
         },
-      },
-
-
-
-      grafana+:: {
-        config: { // http://docs.grafana.org/installation/configuration/
-          sections: {
-            "auth.anonymous": {enabled: true},
-          },
-        },
-      },
-    },
-  };
+    };
 
 { ['setup/0namespace-' + name]: kp.kubePrometheus[name] for name in std.objectFields(kp.kubePrometheus) } +
 
