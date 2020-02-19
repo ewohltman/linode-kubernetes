@@ -46,7 +46,7 @@ local kp =
                       - name: default-receiver
                       - name: pod-bouncer
                         webhook_configs:
-                          - url: http://pod-bouncer.ephemeral-roles.svc.cluster.local/alert
+                          - url: http://pod-bouncer.ephemeral-roles.svc.cluster.local:8080/alert
                     route:
                       group_by: ['alertname']
                       group_wait: 30s
