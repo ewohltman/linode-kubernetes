@@ -51,11 +51,11 @@ local kp =
                       group_by: ['alertname']
                       group_wait: 30s
                       group_interval: 5m
-                      repeat_interval: 30m
+                      repeat_interval: 15m
                       receiver: default-receiver
                       routes:
-                        - match:
-                            alertname: EphemeralRoles-0-Goroutines
+                        - match_re:
+                            alertname: EphemeralRoles-[0-9]*-Goroutines
                           receiver: pod-bouncer
                 |||,
             },
@@ -68,7 +68,37 @@ local kp =
                     rules: [
                         {
                             alert: 'EphemeralRoles-0-Goroutines',
-                            expr: 'go_goroutines{namespace="ephemeral-roles",service="ephemeral-roles",pod="ephemeral-roles-0"} > 1',
+                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-0"} > 50',
+                            labels: {
+                                severity: 'critical',
+                            },
+                            annotations: {
+                                description: 'This is to alert when the number of goroutines exceeds a threshold.',
+                            },
+                        },
+                        {
+                            alert: 'EphemeralRoles-1-Goroutines',
+                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-1"} > 50',
+                            labels: {
+                                severity: 'critical',
+                            },
+                            annotations: {
+                                description: 'This is to alert when the number of goroutines exceeds a threshold.',
+                            },
+                        },
+                        {
+                            alert: 'EphemeralRoles-2-Goroutines',
+                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-2"} > 50',
+                            labels: {
+                                severity: 'critical',
+                            },
+                            annotations: {
+                                description: 'This is to alert when the number of goroutines exceeds a threshold.',
+                            },
+                        },
+                        {
+                            alert: 'EphemeralRoles-3-Goroutines',
+                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-3"} > 50',
                             labels: {
                                 severity: 'critical',
                             },
