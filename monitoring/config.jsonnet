@@ -41,7 +41,7 @@ local kp =
             alertmanager+: {
                 config: |||
                     global:
-                      resolve_timeout: 10m
+                      resolve_timeout: 1m
                     receivers:
                       - name: default-receiver
                       - name: pod-bouncer
