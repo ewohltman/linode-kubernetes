@@ -1,2 +1,5 @@
-# linode-kubernetes/kube-prometheus
-Reference: [kube-prometheus](https://github.com/coreos/kube-prometheus)
+# linode-kubernetes/monitoring
+Prometheus, Grafana, and AlertManager
+
+Reference:
+[kube-prometheus](https://github.com/coreos/kube-prometheus)

@@ -1,4 +1,4 @@
-# linode-kubernetes/efd
+# linode-kubernetes/logging
 Elasticsearch, Fluentd, and Kibana
 
 Reference:

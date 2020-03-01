@@ -1,0 +1,12 @@
+---
+kind: HTTPProxy
+apiVersion: projectcontour.io/v1
+metadata:
+  name: jaeger-httpproxy
+  namespace: projectcontour
+spec:
+  virtualhost:
+    fqdn: jaeger.ephemeral-roles.net
+  includes:
+    - name: jaeger-httpproxy
+      namespace: observability
