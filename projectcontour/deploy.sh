@@ -14,3 +14,6 @@ kubectl apply -f "${SCRIPT_DIR}/grafana-httpproxy.yaml"
 
 echo "🚀 Deploying kibana.ephemeral-roles.net HTTPProxy"
 kubectl apply -f "${SCRIPT_DIR}/kibana-httpproxy.yaml"
+
+echo "🚀 Deploying jaeger.ephemeral-roles.net HTTPProxy"
+kubectl apply -f "${SCRIPT_DIR}/jaeger-httpproxy.yaml"
