@@ -9,4 +9,4 @@ spec:
     fqdn: jaeger.ephemeral-roles.net
   includes:
     - name: jaeger-httpproxy
-      namespace: observability
+      namespace: ephemeral-roles
