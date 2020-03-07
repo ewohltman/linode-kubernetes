@@ -55,7 +55,7 @@ local kp =
                       receiver: default-receiver
                       routes:
                         - match_re:
-                            alertname: EphemeralRoles-[0-9]*-Goroutines
+                            alertname: EphemeralRoles-Goroutines
                           receiver: pod-bouncer
                 |||,
             },
@@ -67,38 +67,8 @@ local kp =
                     name: 'ephemeral-roles',
                     rules: [
                         {
-                            alert: 'EphemeralRoles-0-Goroutines',
-                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-0"} > 50',
-                            labels: {
-                                severity: 'critical',
-                            },
-                            annotations: {
-                                description: 'This is to alert when the number of goroutines exceeds a threshold.',
-                            },
-                        },
-                        {
-                            alert: 'EphemeralRoles-1-Goroutines',
-                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-1"} > 50',
-                            labels: {
-                                severity: 'critical',
-                            },
-                            annotations: {
-                                description: 'This is to alert when the number of goroutines exceeds a threshold.',
-                            },
-                        },
-                        {
-                            alert: 'EphemeralRoles-2-Goroutines',
-                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-2"} > 50',
-                            labels: {
-                                severity: 'critical',
-                            },
-                            annotations: {
-                                description: 'This is to alert when the number of goroutines exceeds a threshold.',
-                            },
-                        },
-                        {
-                            alert: 'EphemeralRoles-3-Goroutines',
-                            expr: 'go_goroutines{namespace="ephemeral-roles",pod="ephemeral-roles-3"} > 50',
+                            alert: 'EphemeralRoles-Goroutines',
+                            expr: 'go_goroutines{namespace="ephemeral-roles",pod=~"ephemeral-roles-.+"} > 50',
                             labels: {
                                 severity: 'critical',
                             },

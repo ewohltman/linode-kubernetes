@@ -257,6 +257,53 @@
       }
     },
     {
+      "datasource": "prometheus",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 44,
+      "options": {
+        "displayMode": "lcd",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-red",
+                  "value": null
+                }
+              ]
+            },
+            "title": ""
+          },
+          "overrides": [],
+          "values": false
+        },
+        "orientation": "horizontal",
+        "showUnfilled": true
+      },
+      "pluginVersion": "6.6.0",
+      "targets": [
+        {
+          "expr": "ephemeral_roles_guilds_count{pod=~\"ephemeral-roles-.+\"}",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Bot Server Distribution",
+      "type": "bargauge"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -268,8 +315,8 @@
       "gridPos": {
         "h": 6,
         "w": 12,
-        "x": 12,
-        "y": 5
+        "x": 0,
+        "y": 11
       },
       "hiddenSeries": false,
       "id": 32,
@@ -356,13 +403,59 @@
       }
     },
     {
+      "datasource": "prometheus",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 11
+      },
+      "id": 46,
+      "options": {
+        "displayMode": "lcd",
+        "fieldOptions": {
+          "calcs": [
+            "last"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-red",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "orientation": "horizontal",
+        "showUnfilled": true
+      },
+      "pluginVersion": "6.6.0",
+      "targets": [
+        {
+          "expr": "ephemeral_roles_members_count{pod=~\"ephemeral-roles-.+\"}",
+          "legendFormat": "{{pod}}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Bot Users Distribution",
+      "type": "bargauge"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 17
       },
       "id": 24,
       "panels": [],
@@ -381,7 +474,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 18
       },
       "hiddenSeries": false,
       "id": 10,
@@ -478,7 +571,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 18
       },
       "hiddenSeries": false,
       "id": 12,
@@ -570,7 +663,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 24
       },
       "id": 22,
       "panels": [],
@@ -590,7 +683,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 25
       },
       "hiddenSeries": false,
       "id": 2,
@@ -602,6 +695,8 @@
         "min": false,
         "rightSide": false,
         "show": true,
+        "sort": "current",
+        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -628,32 +723,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-0",
+          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles.+\"}",
+          "legendFormat": "{{pod}}",
           "refId": "A"
-        },
-        {
-          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-1",
-          "refId": "B"
-        },
-        {
-          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-2",
-          "refId": "C"
-        },
-        {
-          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-3\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-3",
-          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -663,7 +735,7 @@
       "title": "RES Memory Usage",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -711,7 +783,7 @@
         "h": 11,
         "w": 12,
         "x": 12,
-        "y": 19
+        "y": 25
       },
       "hiddenSeries": false,
       "id": 40,
@@ -722,6 +794,8 @@
         "max": false,
         "min": false,
         "show": true,
+        "sort": "current",
+        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -748,36 +822,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-0",
+          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles-.+\"}",
+          "legendFormat": "{{pod}}",
           "refId": "A"
-        },
-        {
-          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-1",
-          "refId": "B"
-        },
-        {
-          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-2",
-          "refId": "C"
-        },
-        {
-          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-3\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-3",
-          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -787,7 +834,7 @@
       "title": "Heap Objects",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -835,7 +882,7 @@
         "h": 11,
         "w": 12,
         "x": 0,
-        "y": 30
+        "y": 36
       },
       "hiddenSeries": false,
       "id": 18,
@@ -848,6 +895,8 @@
         "min": false,
         "rightSide": false,
         "show": true,
+        "sort": "current",
+        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -874,40 +923,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}[1m])",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-0",
+          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles-.+\"}[1m])",
+          "legendFormat": "{{pod}}",
           "refId": "A"
-        },
-        {
-          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}[1m])",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-1",
-          "refId": "B"
-        },
-        {
-          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}[1m])",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-2",
-          "refId": "C"
-        },
-        {
-          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-3\"}[1m])",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-3",
-          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -917,7 +935,7 @@
       "title": "CPU Utilization",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -965,7 +983,7 @@
         "h": 11,
         "w": 12,
         "x": 12,
-        "y": 30
+        "y": 36
       },
       "hiddenSeries": false,
       "id": 42,
@@ -976,6 +994,8 @@
         "max": false,
         "min": false,
         "show": true,
+        "sort": "current",
+        "sortDesc": true,
         "total": false,
         "values": true
       },
@@ -1002,32 +1022,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-0\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-0",
+          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles-.+\"}",
+          "legendFormat": "{{pod}}",
           "refId": "A"
-        },
-        {
-          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-1\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-1",
-          "refId": "B"
-        },
-        {
-          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-2\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-2",
-          "refId": "C"
-        },
-        {
-          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=\"ephemeral-roles-3\"}",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "legendFormat": "ephemeral-roles-3",
-          "refId": "D"
         }
       ],
       "thresholds": [],
@@ -1037,7 +1034,7 @@
       "title": "Goroutines",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1112,5 +1109,5 @@
   "timezone": "",
   "title": "Ephemeral Roles Metrics",
   "uid": "OqANQqtiz",
-  "version": 3
+  "version": 1
 }
