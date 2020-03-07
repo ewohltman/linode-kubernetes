@@ -95,7 +95,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"})",
+          "expr": "avg(label_replace(up{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\"}, \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "uptime",
@@ -207,7 +207,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ephemeral_roles_guilds_count)",
+          "expr": "sum(label_replace(ephemeral_roles_guilds_count, \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "servers",
@@ -293,7 +293,7 @@
       "pluginVersion": "6.6.0",
       "targets": [
         {
-          "expr": "ephemeral_roles_guilds_count{pod=~\"ephemeral-roles-.+\"}",
+          "expr": "label_replace(ephemeral_roles_guilds_count{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -353,7 +353,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(ephemeral_roles_members_count)",
+          "expr": "sum(label_replace(ephemeral_roles_members_count, \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "users",
@@ -438,7 +438,7 @@
       "pluginVersion": "6.6.0",
       "targets": [
         {
-          "expr": "ephemeral_roles_members_count{pod=~\"ephemeral-roles-.+\"}",
+          "expr": "label_replace(ephemeral_roles_members_count{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -510,7 +510,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(ephemeral_roles_voice_state_update_events[1m]))",
+          "expr": "sum(label_replace(irate(ephemeral_roles_voice_state_update_events[1m]), \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "events/second",
@@ -607,7 +607,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(ephemeral_roles_message_create_events[1m]))",
+          "expr": "sum(label_replace(irate(ephemeral_roles_message_create_events[1m]), \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "events/second",
@@ -723,7 +723,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles.+\"}",
+          "expr": "label_replace(process_resident_memory_bytes{pod=~\"ephemeral-roles.+\"}, \"instance\", \"\", \"instance\", \".+\")",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -822,7 +822,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_heap_objects{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles-.+\"}",
+          "expr": "label_replace(go_memstats_heap_objects{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -923,7 +923,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(process_cpu_seconds_total{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles-.+\"}[1m])",
+          "expr": "label_replace(rate(process_cpu_seconds_total{pod=~\"ephemeral-roles-.+\"}[1m]), \"instance\", \"\", \"instance\", \".+\")",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -1022,7 +1022,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_goroutines{namespace=\"ephemeral-roles\",service=\"ephemeral-roles\",pod=~\"ephemeral-roles-.+\"}",
+          "expr": "label_replace(go_goroutines{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -1070,7 +1070,7 @@
       }
     }
   ],
-  "refresh": "5s",
+  "refresh": "2h",
   "schemaVersion": 22,
   "style": "dark",
   "tags": [],
@@ -1109,5 +1109,5 @@
   "timezone": "",
   "title": "Ephemeral Roles Metrics",
   "uid": "OqANQqtiz",
-  "version": 1
+  "version": 2
 }
