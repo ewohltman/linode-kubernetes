@@ -32,7 +32,7 @@
       "type": "row"
     },
     {
-      "content": "<br/>\n<center>\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\"><img src=\"https://raw.githubusercontent.com/ewohltman/ephemeral-roles/master/web/static/logo_Testa_anatomica_(1854)_-_Filippo_Balbi.jpg\" width=\"50\"></a>\n  &nbsp\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\">ephemeral-roles</a>\n</center>",
+      "content": "<br/>\n<center>\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\"><img src=\"https://github.com/ewohltman/ephemeral-roles/raw/master/web/static/Testa_Anatomica-Filippo_Balbi.jpg\" width=\"50\"></a>\n  &nbsp\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\">ephemeral-roles</a>\n</center>",
       "datasource": null,
       "gridPos": {
         "h": 3,
@@ -1070,7 +1070,7 @@
       }
     }
   ],
-  "refresh": "2h",
+  "refresh": "5s",
   "schemaVersion": 22,
   "style": "dark",
   "tags": [],
@@ -1109,5 +1109,5 @@
   "timezone": "",
   "title": "Ephemeral Roles Metrics",
   "uid": "OqANQqtiz",
-  "version": 2
+  "version": 1
 }
