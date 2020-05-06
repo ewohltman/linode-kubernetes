@@ -68,7 +68,7 @@ local kp =
                     rules: [
                         {
                             alert: 'EphemeralRoles-Goroutines',
-                            expr: 'go_goroutines{namespace="ephemeral-roles",pod=~"ephemeral-roles-.+"} > 50',
+                            expr: 'go_goroutines{namespace="ephemeral-roles",pod=~"ephemeral-roles-.+"} > 100',
                             labels: {
                                 severity: 'critical',
                             },
