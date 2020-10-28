@@ -39,6 +39,9 @@ build() {
 
   echo "🚀 Building kube-prometheus yaml files"
   jsonnet -J vendor -m manifests "${config_file}" | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml; rm -f {}' -- {}
+
+  cp grafana-httpproxy.yaml manifests
+  cp servicemonitor-ephemeral-roles.yaml manifests
 }
 
 cleanup() {

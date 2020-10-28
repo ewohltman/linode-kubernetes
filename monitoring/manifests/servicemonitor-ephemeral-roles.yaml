@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ephemeral-roles
+  namespace: monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+    - ephemeral-roles
+  selector:
+    matchLabels:
+      app: ephemeral-roles
+  endpoints:
+    - port: http
