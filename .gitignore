@@ -2,6 +2,5 @@
 .idea
 
 # kube-prometheus generated files
-monitoring/manifests
 monitoring/vendor
 monitoring/jsonnetfile.lock.json
