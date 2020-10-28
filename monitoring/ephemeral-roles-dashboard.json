@@ -52,7 +52,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "fill": 3,
       "fillGradient": 0,
       "gridPos": {
@@ -163,7 +163,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
@@ -257,7 +257,7 @@
       }
     },
     {
-      "datasource": "prometheus",
+      "datasource": "default",
       "gridPos": {
         "h": 6,
         "w": 12,
@@ -308,7 +308,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
@@ -403,7 +403,7 @@
       }
     },
     {
-      "datasource": "prometheus",
+      "datasource": "default",
       "gridPos": {
         "h": 6,
         "w": 12,
@@ -467,7 +467,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -564,7 +564,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -675,7 +675,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
@@ -775,7 +775,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "decimals": null,
       "fill": 1,
       "fillGradient": 0,
@@ -874,7 +874,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "decimals": 2,
       "fill": 1,
       "fillGradient": 0,
@@ -975,7 +975,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "prometheus",
+      "datasource": "default",
       "decimals": 0,
       "fill": 1,
       "fillGradient": 0,
