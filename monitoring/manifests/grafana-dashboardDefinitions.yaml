@@ -4773,7 +4773,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "fill": 3,
                   "fillGradient": 0,
                   "gridPos": {
@@ -4898,7 +4898,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "decimals": 0,
                   "fill": 1,
                   "fillGradient": 0,
@@ -5002,7 +5002,7 @@ items:
                   }
               },
               {
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "gridPos": {
                       "h": 6,
                       "w": 12,
@@ -5059,7 +5059,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "decimals": 0,
                   "fill": 1,
                   "fillGradient": 0,
@@ -5164,7 +5164,7 @@ items:
                   }
               },
               {
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "gridPos": {
                       "h": 6,
                       "w": 12,
@@ -5236,7 +5236,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "fill": 1,
                   "fillGradient": 0,
                   "gridPos": {
@@ -5345,7 +5345,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "fill": 1,
                   "fillGradient": 0,
                   "gridPos": {
@@ -5470,7 +5470,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "decimals": 0,
                   "fill": 1,
                   "fillGradient": 0,
@@ -5582,7 +5582,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "decimals": null,
                   "fill": 1,
                   "fillGradient": 0,
@@ -5693,7 +5693,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "decimals": 2,
                   "fill": 1,
                   "fillGradient": 0,
@@ -5806,7 +5806,7 @@ items:
                   "bars": false,
                   "dashLength": 10,
                   "dashes": false,
-                  "datasource": "default",
+                  "datasource": "prometheus",
                   "decimals": 0,
                   "fill": 1,
                   "fillGradient": 0,
