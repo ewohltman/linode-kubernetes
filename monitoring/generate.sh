@@ -24,7 +24,7 @@ setup() {
   go get -u github.com/brancz/gojsontoyaml
 
   echo "🚀 Syncing with upstream kube-prometheus"
-  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.4 2>/dev/null
+  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.6 2>/dev/null
   jb update 2>/dev/null
 }
 
