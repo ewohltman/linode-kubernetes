@@ -42,7 +42,7 @@ spec:
               cpu: 100m
           env:
             - name: ELASTICSEARCH_URL
-              value: http://elasticsearch:9200
+              value: http://elasticsearch.logging.svc.cluster.local:9200
           ports:
             - name: http
               containerPort: 5601
