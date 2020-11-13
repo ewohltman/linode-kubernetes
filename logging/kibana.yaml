@@ -29,6 +29,8 @@ spec:
     metadata:
       labels:
         app: kibana
+      annotations:
+        linkerd.io/inject: enabled
     spec:
       containers:
         - name: kibana
