@@ -1,9 +1,6 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  labels:
-    app.kubernetes.io/name: kube-state-metrics
-    app.kubernetes.io/version: v1.9.7
   name: kube-state-metrics
 rules:
 - apiGroups:
@@ -96,8 +93,8 @@ rules:
 - apiGroups:
   - admissionregistration.k8s.io
   resources:
-  - mutatingwebhookconfigurations
   - validatingwebhookconfigurations
+  - mutatingwebhookconfigurations
   verbs:
   - list
   - watch

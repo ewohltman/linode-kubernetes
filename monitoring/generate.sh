@@ -24,7 +24,7 @@ setup() {
   go get -u github.com/brancz/gojsontoyaml
 
   echo "🚀 Syncing with upstream kube-prometheus"
-  jb install github.com/coreos/kube-prometheus/jsonnet/kube-prometheus 2>/dev/null
+  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.4 2>/dev/null
   jb update 2>/dev/null
 }
 
@@ -33,6 +33,8 @@ build() {
 
   echo "🚀 Generating kube-prometheus yaml files"
   jsonnet -J vendor -m manifests "${CONFIG_FILE}" | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml; rm -f {}' -- {}
+
+  find manifests -type f ! -name '*.yaml' -delete
 
   cp custom/0monitoring-namespace.yaml manifests/setup
   cp custom/grafana-httpproxy.yaml manifests

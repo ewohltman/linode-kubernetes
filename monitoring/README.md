@@ -2,4 +2,4 @@
 Prometheus, Grafana, and AlertManager
 
 Reference:
-[kube-prometheus](https://github.com/coreos/kube-prometheus)
+[kube-prometheus](https://github.com/prometheus-operator/kube-prometheus)
