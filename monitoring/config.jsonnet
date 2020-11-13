@@ -82,8 +82,6 @@ local kp =
         },
     };
 
-{ ['setup/0namespace-' + name]: kp.kubePrometheus[name] for name in std.objectFields(kp.kubePrometheus) } +
-
 {
   ['setup/prometheus-operator-' + name]: kp.prometheusOperator[name]
   for name in std.filter((function(name) name != 'serviceMonitor'), std.objectFields(kp.prometheusOperator))
