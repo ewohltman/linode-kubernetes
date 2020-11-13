@@ -1845,7 +1845,7 @@ spec:
             preStop:
               httpGet:
                 path: /shutdown
-                port: 8090F
+                port: 8090
                 scheme: HTTP
       initContainers:
         - args:
