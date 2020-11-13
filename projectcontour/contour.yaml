@@ -128,7 +128,6 @@ metadata:
   creationTimestamp: null
   name: extensionservices.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: ExtensionService
@@ -365,7 +364,6 @@ metadata:
   creationTimestamp: null
   name: httpproxies.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: HTTPProxy
@@ -1220,7 +1218,6 @@ metadata:
   creationTimestamp: null
   name: tlscertificatedelegations.projectcontour.io
 spec:
-  preserveUnknownFields: false
   group: projectcontour.io
   names:
     kind: TLSCertificateDelegation
@@ -1442,7 +1439,6 @@ metadata:
   name: contour-certgen-v1.10.0
   namespace: projectcontour
 spec:
-  ttlSecondsAfterFinished: 0
   template:
     metadata:
       labels:
