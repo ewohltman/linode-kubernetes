@@ -19,8 +19,6 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: projectcontour
-  annotations:
-    linkerd.io/inject: enabled
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -1669,6 +1667,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8000"
+        linkerd.io/inject: enabled
       labels:
         app: contour
     spec:
@@ -1774,6 +1773,7 @@ spec:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8002"
         prometheus.io/path: "/stats/prometheus"
+        linkerd.io/inject: enabled
       labels:
         app: envoy
     spec:
