@@ -2,5 +2,7 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: monitoring
+  labels:
+    app.kubernetes.io/instance: monitoring
   annotations:
     linkerd.io/inject: enabled
