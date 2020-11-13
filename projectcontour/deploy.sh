@@ -7,7 +7,8 @@ SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
 echo "🚀 Deploying Contour"
-kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
+# kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
+kubectl apply -f "${SCRIPT_DIR}/contour.yaml"
 
 echo "🚀 Deploying grafana.ephemeral-roles.net HTTPProxy"
 kubectl apply -f "${SCRIPT_DIR}/grafana-httpproxy.yaml"
