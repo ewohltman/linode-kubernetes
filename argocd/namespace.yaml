@@ -1,6 +1,7 @@
+---
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: logging
+  name: argocd
   annotations:
     linkerd.io/inject: enabled

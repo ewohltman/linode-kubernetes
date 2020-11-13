@@ -1,0 +1,2 @@
+generate:
+	@ ./monitoring/generate.sh

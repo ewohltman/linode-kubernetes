@@ -12,11 +12,11 @@ MONITORING_DIR="${SCRIPT_DIR}/monitoring"
 OBSERVABILITY_DIR="${SCRIPT_DIR}/observability"
 
 setup() {
-  pushd . > /dev/null 2>&1 && cd "${SCRIPT_DIR}"
+  pushd . >/dev/null 2>&1 && cd "${SCRIPT_DIR}"
 }
 
-build() {
-  "${MONITORING_DIR}/build.sh"
+generate() {
+  "${MONITORING_DIR}/generate.sh"
 }
 
 deploy() {
@@ -30,13 +30,13 @@ deploy() {
 }
 
 cleanup() {
-  popd > /dev/null 2>&1
+  popd >/dev/null 2>&1
 }
 
 trap cleanup EXIT
 
 setup
-build
+generate
 deploy
 
 echo "🚀 Deployment complete"

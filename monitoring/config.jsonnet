@@ -2,10 +2,6 @@ local kp =
     (import 'kube-prometheus/kube-prometheus.libsonnet') +
     (import 'kube-prometheus/kube-prometheus-anti-affinity.libsonnet') +
     {
-        grafanaDashboards+:: {
-            'ephemeral-roles-dashboard.json': (import 'ephemeral-roles-dashboard.json'),
-        },
-
         _config+:: {
             namespace: 'monitoring',
 
@@ -79,6 +75,10 @@ local kp =
                     ],
                 },
             ],
+        },
+
+        grafanaDashboards+:: {
+            'ephemeral-roles-dashboard.json': (import 'ephemeral-roles-dashboard.json'),
         },
     };
 

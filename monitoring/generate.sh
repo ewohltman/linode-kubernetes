@@ -8,10 +8,10 @@ set -o pipefail # Only exit with zero if all commands of the pipeline exit succe
 SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
-CONFIG_FILE=${1}
+CONFIG_FILE="config.jsonnet"
 
 setup() {
-  pushd . > /dev/null 2>&1 && cd "${SCRIPT_DIR}"
+  pushd . >/dev/null 2>&1 && cd "${SCRIPT_DIR}"
 
   echo "🚀 Cleaning kube-prometheus build environment"
   rm -rf vendor
@@ -24,34 +24,28 @@ setup() {
   go get -u github.com/brancz/gojsontoyaml
 
   echo "🚀 Syncing with upstream kube-prometheus"
-  jb install github.com/coreos/kube-prometheus/jsonnet/kube-prometheus
-  jb update
+  jb install github.com/coreos/kube-prometheus/jsonnet/kube-prometheus 2>/dev/null
+  jb update 2>/dev/null
 }
 
 build() {
-  local config_file=${1}
+  echo "🚀 Config file for kube-prometheus: ${CONFIG_FILE}"
 
-  if [[ ${config_file} == "" ]]; then
-    config_file="config.jsonnet"
-  fi
+  echo "🚀 Generating kube-prometheus yaml files"
+  jsonnet -J vendor -m manifests "${CONFIG_FILE}" | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml; rm -f {}' -- {}
 
-  echo "🚀 Config file for kube-prometheus: ${config_file}"
-
-  echo "🚀 Building kube-prometheus yaml files"
-  jsonnet -J vendor -m manifests "${config_file}" | xargs -I{} sh -c 'cat {} | gojsontoyaml > {}.yaml; rm -f {}' -- {}
-
-  cp namespace.yaml manifests
-  cp grafana-httpproxy.yaml manifests
-  cp servicemonitor-ephemeral-roles.yaml manifests
+  cp custom/0monitoring-namespace.yaml manifests/setup
+  cp custom/grafana-httpproxy.yaml manifests
+  cp custom/servicemonitor-ephemeral-roles.yaml manifests
 }
 
 cleanup() {
-  popd > /dev/null 2>&1
+  popd >/dev/null 2>&1
 }
 
 trap cleanup EXIT
 
 setup
-build "${CONFIG_FILE}"
+build
 
-echo "🚀 Building kube-prometheus yaml files complete"
+echo "🚀 Generating kube-prometheus yaml files complete"
