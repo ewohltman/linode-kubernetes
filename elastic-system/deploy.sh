@@ -12,8 +12,11 @@ kubectl apply -f "${SCRIPT_DIR}/all-in-one.yaml"
 echo "🚀 Deploying Elasticsearch Cluster"
 kubectl apply -f "${SCRIPT_DIR}/elasticsearch.yaml"
 
+echo "🚀 Deploying Fluent Bit"
+kubectl apply -f "${SCRIPT_DIR}/fluentbit.yaml"
+
 echo "🚀 Deploying Kibana"
 kubectl apply -f "${SCRIPT_DIR}/kibana.yaml"
 
-echo "🚀 Deploying Grafana Contour HTTPProxy"
+echo "🚀 Deploying Kibana Contour HTTPProxy"
 kubectl apply -f "${SCRIPT_DIR}/kibana-httpproxy.yaml"
