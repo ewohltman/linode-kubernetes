@@ -1,10 +1,11 @@
+---
 kind: HTTPProxy
 apiVersion: projectcontour.io/v1
 metadata:
   name: kibana-httpproxy
-  namespace: logging
+  namespace: elastic-system
 spec:
   routes:
     - services:
-        - name: kibana
-          port: 80
+        - name: kibana-kb-http
+          port: 5601
