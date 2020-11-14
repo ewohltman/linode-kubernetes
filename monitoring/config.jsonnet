@@ -8,9 +8,7 @@ local kp =
             versions+:: {
                 alertmanager: "v0.17.0",
                 nodeExporter: "v0.18.1",
-                kubeStateMetrics: "v1.5.0",
                 kubeRbacProxy: "v0.4.1",
-                prometheusOperator: "v0.30.0",
                 prometheus: "v2.10.0",
             },
 
