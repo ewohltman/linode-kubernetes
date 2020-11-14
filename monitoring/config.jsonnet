@@ -5,22 +5,8 @@ local kp =
         _config+:: {
             namespace: 'monitoring',
 
-            versions+:: {
-                alertmanager: "v0.17.0",
-                nodeExporter: "v0.18.1",
-                kubeRbacProxy: "v0.4.1",
-                prometheus: "v2.10.0",
-            },
-
             prometheus+:: {
-                namespaces+: [
-                    'kube-system',
-                    'monitoring',
-                    'elastic-system',
-                    'observability',
-                    'projectcontour',
-                    'ephemeral-roles',
-                ],
+                namespaces+: ['kube-system','monitoring','elastic-system','observability','projectcontour','ephemeral-roles'],
                 serviceMonitorEphemeralRoles: {
                     apiVersion: 'monitoring.coreos.com/v1',
                     kind: 'ServiceMonitor',
