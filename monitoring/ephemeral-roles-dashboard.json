@@ -32,7 +32,6 @@
       "type": "row"
     },
     {
-      "content": "<br/>\n<center>\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\"><img src=\"https://github.com/ewohltman/ephemeral-roles/raw/master/web/static/Testa_Anatomica-Filippo_Balbi.jpg\" width=\"50\"></a>\n  &nbsp\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\">ephemeral-roles</a>\n</center>",
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -48,12 +47,11 @@
       },
       "id": 20,
       "links": [],
-      "mode": "html",
       "options": {
         "content": "<br/>\n<center>\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\"><img src=\"https://github.com/ewohltman/ephemeral-roles/raw/master/web/static/Testa_Anatomica-Filippo_Balbi.jpg\" width=\"50\"></a>\n  &nbsp\n  <a href=\"https://github.com/ewohltman/ephemeral-roles\">ephemeral-roles</a>\n</center>",
         "mode": "html"
       },
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "title": "",
       "type": "text"
     },
@@ -93,8 +91,11 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -211,8 +212,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -314,7 +318,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "targets": [
         {
           "expr": "label_replace(ephemeral_roles_guilds_count{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
@@ -366,8 +370,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -468,7 +475,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "targets": [
         {
           "expr": "label_replace(ephemeral_roles_members_count{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
@@ -532,8 +539,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -634,8 +644,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -754,8 +767,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -872,8 +888,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -990,7 +1009,7 @@
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1096,7 +1115,7 @@
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
-      "pluginVersion": "7.1.0",
+      "pluginVersion": "7.3.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1181,7 +1200,7 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
@@ -1212,5 +1231,5 @@
   "timezone": "",
   "title": "Ephemeral Roles Metrics",
   "uid": "OqANQqtiz",
-  "version": 2
+  "version": 1
 }
