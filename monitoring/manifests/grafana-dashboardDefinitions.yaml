@@ -6054,7 +6054,7 @@ items:
               ]
           },
           "time": {
-              "from": "now-5m",
+              "from": "now-24h",
               "to": "now"
           },
           "timepicker": {
@@ -6085,7 +6085,7 @@ items:
           "timezone": "",
           "title": "Ephemeral Roles Metrics",
           "uid": "OqANQqtiz",
-          "version": 1
+          "version": 2
       }
   kind: ConfigMap
   metadata:
