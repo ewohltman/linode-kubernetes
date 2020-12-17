@@ -12,9 +12,6 @@ spec:
       app: grafana
   template:
     metadata:
-      annotations:
-        checksum/grafana-config: 557b1a2e3135b97b276d082de8422266
-        checksum/grafana-datasources: 48faab41f579fc8efde6034391496f6a
       labels:
         app: grafana
     spec:
@@ -124,7 +121,6 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
       securityContext:
-        fsGroup: 65534
         runAsNonRoot: true
         runAsUser: 65534
       serviceAccountName: grafana
