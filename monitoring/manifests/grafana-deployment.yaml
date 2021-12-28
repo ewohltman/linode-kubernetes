@@ -2,25 +2,34 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: grafana
+    app.kubernetes.io/component: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 8.3.3
   name: grafana
   namespace: monitoring
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: grafana
+      app.kubernetes.io/component: grafana
+      app.kubernetes.io/name: grafana
+      app.kubernetes.io/part-of: kube-prometheus
   template:
     metadata:
       annotations:
-        checksum/grafana-config: 557b1a2e3135b97b276d082de8422266
-        checksum/grafana-datasources: 48faab41f579fc8efde6034391496f6a
+        checksum/grafana-config: 7b3cae51a26374d19f686e5b3f1fa5df
+        checksum/grafana-dashboardproviders: cf4ac6c4d98eb91172b3307d9127acc5
+        checksum/grafana-datasources: 2e669e49f44117d62bc96ea62c2d39d3
       labels:
-        app: grafana
+        app.kubernetes.io/component: grafana
+        app.kubernetes.io/name: grafana
+        app.kubernetes.io/part-of: kube-prometheus
+        app.kubernetes.io/version: 8.3.3
     spec:
       containers:
       - env: []
-        image: grafana/grafana:7.1.0
+        image: grafana/grafana:8.3.3
         name: grafana
         ports:
         - containerPort: 3000
@@ -45,6 +54,9 @@ spec:
           readOnly: false
         - mountPath: /etc/grafana/provisioning/dashboards
           name: grafana-dashboards
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/alertmanager-overview
+          name: grafana-dashboard-alertmanager-overview
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/apiserver
           name: grafana-dashboard-apiserver
@@ -112,9 +124,6 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/scheduler
           name: grafana-dashboard-scheduler
           readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/statefulset
-          name: grafana-dashboard-statefulset
-          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/workload-total
           name: grafana-dashboard-workload-total
           readOnly: false
@@ -122,7 +131,7 @@ spec:
           name: grafana-config
           readOnly: false
       nodeSelector:
-        beta.kubernetes.io/os: linux
+        kubernetes.io/os: linux
       securityContext:
         fsGroup: 65534
         runAsNonRoot: true
@@ -137,6 +146,9 @@ spec:
       - configMap:
           name: grafana-dashboards
         name: grafana-dashboards
+      - configMap:
+          name: grafana-dashboard-alertmanager-overview
+        name: grafana-dashboard-alertmanager-overview
       - configMap:
           name: grafana-dashboard-apiserver
         name: grafana-dashboard-apiserver
@@ -203,9 +215,6 @@ spec:
       - configMap:
           name: grafana-dashboard-scheduler
         name: grafana-dashboard-scheduler
-      - configMap:
-          name: grafana-dashboard-statefulset
-        name: grafana-dashboard-statefulset
       - configMap:
           name: grafana-dashboard-workload-total
         name: grafana-dashboard-workload-total

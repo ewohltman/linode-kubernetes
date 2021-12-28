@@ -19,13 +19,13 @@ setup() {
   mkdir -p manifests/setup
 
   echo "🚀 Getting required kube-prometheus tools"
-  go get -u github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-  go get -u github.com/google/go-jsonnet/cmd/jsonnet
-  go get -u github.com/brancz/gojsontoyaml
+  go install -a github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+  go install -a github.com/google/go-jsonnet/cmd/jsonnet@latest
+  go install -a github.com/brancz/gojsontoyaml@latest
 
   echo "🚀 Syncing with upstream kube-prometheus"
-  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.6 2>/dev/null
-  jb update 2>/dev/null
+  jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@release-0.10
+  jb update
 }
 
 build() {
@@ -36,7 +36,6 @@ build() {
 
   find manifests -type f ! -name '*.yaml' -delete
 
-  cp custom/0monitoring-namespace.yaml manifests/setup
   cp custom/grafana-httpproxy.yaml manifests
   cp custom/servicemonitor-ephemeral-roles.yaml manifests
 }
