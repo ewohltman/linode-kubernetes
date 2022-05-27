@@ -558,7 +558,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(irate(ephemeral_roles_message_create_events[1m]), \"instance\", \"\", \"instance\", \".+\"))",
+          "expr": "sum(label_replace(rate(ephemeral_roles_message_create_events[$__rate_interval]), \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "events/second",
@@ -663,7 +663,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(label_replace(irate(ephemeral_roles_voice_state_update_events[1m]), \"instance\", \"\", \"instance\", \".+\"))",
+          "expr": "sum(label_replace(rate(ephemeral_roles_voice_state_update_events[$__rate_interval]), \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "events/second",
