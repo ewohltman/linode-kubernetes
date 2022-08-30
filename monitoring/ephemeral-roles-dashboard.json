@@ -231,7 +231,7 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "none"
         },
         "overrides": [
           {
@@ -274,8 +274,14 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(label_replace(ephemeral_roles_guilds_count, \"instance\", \"\", \"instance\", \".+\"))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "exemplar": true,
+          "expr": "sum(label_replace(ephemeral_roles_guilds, \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "servers",
           "refId": "A"
@@ -327,7 +333,13 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "label_replace(ephemeral_roles_guilds_count{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "exemplar": true,
+          "expr": "label_replace(ephemeral_roles_guilds{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
+          "interval": "",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -432,8 +444,14 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(label_replace(ephemeral_roles_members_count, \"instance\", \"\", \"instance\", \".+\"))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "exemplar": true,
+          "expr": "sum(label_replace(ephemeral_roles_members, \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "users",
           "refId": "A"
@@ -484,7 +502,13 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "label_replace(ephemeral_roles_members_count{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "exemplar": true,
+          "expr": "label_replace(ephemeral_roles_members{pod=~\"ephemeral-roles-.+\"}, \"instance\", \"\", \"instance\", \".+\")",
+          "interval": "",
           "legendFormat": "{{pod}}",
           "refId": "A"
         }
@@ -543,7 +567,7 @@
               "mode": "off"
             }
           },
-          "decimals": 0,
+          "decimals": 1,
           "links": [],
           "mappings": [],
           "thresholds": {
@@ -559,7 +583,7 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "none"
         },
         "overrides": [
           {
@@ -581,122 +605,8 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 12,
+        "w": 24,
         "x": 0,
-        "y": 18
-      },
-      "id": 12,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull"
-          ],
-          "displayMode": "table",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.3.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
-          },
-          "exemplar": true,
-          "expr": "sum(label_replace(rate(ephemeral_roles_message_create_events[$__rate_interval]), \"instance\", \"\", \"instance\", \".+\"))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "events/second",
-          "refId": "A"
-        }
-      ],
-      "title": "MessageCreate - Events Per Second",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "P1809F7CD0C75ACF3"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "events/second"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#8F3BB8",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
         "y": 18
       },
       "id": 10,
@@ -722,7 +632,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "exemplar": true,
-          "expr": "sum(label_replace(rate(ephemeral_roles_voice_state_update_events[$__rate_interval]), \"instance\", \"\", \"instance\", \".+\"))",
+          "expr": "sum(label_replace(irate(ephemeral_roles_voice_state_update_events_total[1m]), \"instance\", \"\", \"instance\", \".+\"))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -788,12 +698,17 @@
           "decimals": 0,
           "links": [],
           "mappings": [],
+          "max": 268435456,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "#F2495C",
+                "color": "red",
                 "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 268435456
               }
             ]
           },
@@ -895,12 +810,17 @@
           "decimals": 0,
           "links": [],
           "mappings": [],
+          "max": 100,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "red",
                 "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 100
               }
             ]
           },
@@ -1007,6 +927,10 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           },
@@ -1107,12 +1031,17 @@
           "decimals": 1,
           "links": [],
           "mappings": [],
+          "max": 0.1,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "red",
                 "value": null
+              },
+              {
+                "color": "transparent",
+                "value": 0.1
               }
             ]
           },
@@ -1182,7 +1111,7 @@
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
