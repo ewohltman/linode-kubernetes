@@ -1,0 +1,12 @@
+---
+kind: HTTPProxy
+apiVersion: projectcontour.io/v1
+metadata:
+  name: argocd-httpproxy
+  namespace: argocd
+spec:
+  routes:
+    - services:
+        - name: argocd-server
+          port: 443
+

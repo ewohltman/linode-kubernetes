@@ -2,11 +2,12 @@
 kind: HTTPProxy
 apiVersion: projectcontour.io/v1
 metadata:
-  name: jaeger-httpproxy
+  name: argocd-httpproxy
   namespace: projectcontour
 spec:
   virtualhost:
-    fqdn: jaeger.ephemeral-roles.net
+    fqdn: argocd.ephemeral-roles.net
   includes:
-    - name: jaeger-httpproxy
-      namespace: observability
+    - name: argocd-httpproxy
+      namespace: argocd
+
