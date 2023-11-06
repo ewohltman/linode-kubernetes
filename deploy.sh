@@ -19,11 +19,11 @@ generate() {
 }
 
 deploy() {
-  # "${PROJECTCONTOUR_DIR}/deploy.sh"
-  # sleep 1
+  "${PROJECTCONTOUR_DIR}/deploy.sh"
+  sleep 1
   "${MONITORING_DIR}/deploy.sh"
-  # sleep 1
-  # "${OBSERVABILITY_DIR}/deploy.sh"
+  sleep 1
+  "${OBSERVABILITY_DIR}/deploy.sh"
 }
 
 cleanup() {
