@@ -3,5 +3,3 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: argocd
-  annotations:
-    linkerd.io/inject: enabled
