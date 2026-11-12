@@ -23,6 +23,12 @@ spec:
             # so Envoy sees the real client IP.
             config.linkerd.io/skip-inbound-ports: "10080,10443"
       envoyService:
-        # Phase 3: reachable only inside the cluster while Contour still
-        # serves public traffic. Phase 4 moves the existing NodeBalancer here.
-        type: ClusterIP
+        type: LoadBalancer
+        # Keep client source IPs; traffic only goes to nodes running Envoy.
+        externalTrafficPolicy: Local
+        annotations:
+          # Adopt the NodeBalancer Contour used, so the public IPs
+          # (45.79.61.251 and 2600:3c00:1::2d4f:3dfb) and DNS stay the same.
+          service.beta.kubernetes.io/linode-loadbalancer-nodebalancer-id: "NODEBALANCER_ID"
+          # Never delete the NodeBalancer (and lose the IPs) with this Service.
+          service.beta.kubernetes.io/linode-loadbalancer-preserve: "true"

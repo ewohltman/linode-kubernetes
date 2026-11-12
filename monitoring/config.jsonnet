@@ -8,7 +8,7 @@ local kp =
         },
 
         prometheus+:: {
-          namespaces+: ['kube-system','monitoring','observability','projectcontour','ephemeral-roles'],
+          namespaces+: ['kube-system','monitoring','observability','ephemeral-roles'],
           serviceMonitorEphemeralRoles: {
             apiVersion: 'monitoring.coreos.com/v1',
             kind: 'ServiceMonitor',

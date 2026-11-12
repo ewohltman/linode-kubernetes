@@ -6,7 +6,6 @@ set -o pipefail # Only exit with zero if all commands of the pipeline exit succe
 SCRIPT_PATH=$(readlink -f "${0}")
 SCRIPT_DIR=$(dirname "${SCRIPT_PATH}")
 
-PROJECTCONTOUR_DIR="${SCRIPT_DIR}/projectcontour"
 MONITORING_DIR="${SCRIPT_DIR}/monitoring"
 OBSERVABILITY_DIR="${SCRIPT_DIR}/observability"
 
@@ -19,8 +18,6 @@ generate() {
 }
 
 deploy() {
-  "${PROJECTCONTOUR_DIR}/deploy.sh"
-  sleep 1
   "${MONITORING_DIR}/deploy.sh"
   sleep 1
   "${OBSERVABILITY_DIR}/deploy.sh"

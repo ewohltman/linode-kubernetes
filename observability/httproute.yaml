@@ -11,7 +11,7 @@ spec:
   parentRefs:
     - name: public
       namespace: envoy-gateway-system
-      sectionName: http
+      sectionName: https-jaeger
   hostnames:
     - jaeger.ephemeral-roles.net
   rules:

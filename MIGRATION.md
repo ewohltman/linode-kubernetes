@@ -157,3 +157,86 @@ curl -sI -H 'Host: grafana.ephemeral-roles.net' localhost:8080/login   # 200
 curl -sI -H 'Host: argocd.ephemeral-roles.net' localhost:8080/          # 200
 curl -sI -H 'Host: jaeger.ephemeral-roles.net' localhost:8080/          # 302 to accounts.google.com
 ```
+
+## Phase 4: cut over to Envoy Gateway, HTTPS everywhere, remove Contour
+
+What changes:
+
+- The Envoy Gateway Service becomes a LoadBalancer that **adopts Contour's
+  NodeBalancer**, so the public IPs (45.79.61.251, 2600:3c00:1::2d4f:3dfb)
+  and DNS stay the same. It's also marked `preserve`.
+- The `public` Gateway gets one HTTPS listener per host. cert-manager
+  issues a Let's Encrypt certificate for each through HTTP-01 on the `http`
+  listener. Plain HTTP is redirected to HTTPS, apart from ACME challenges.
+- Each HTTPS listener accepts routes only from its app's namespace. The
+  app routes move from `http` to their `https-*` listener.
+- Contour, every HTTPProxy, and the Prometheus Role/RoleBinding in
+  `projectcontour` are removed.
+
+Before landing:
+
+1. Phase 3 is healthy and its port-forward tests pass. The `jaeger-oidc`
+   Secret exists.
+2. **Fill in the NodeBalancer ID.** Find it in Cloud Manager → NodeBalancers
+   → the one with IP 45.79.61.251 (the ID is in its URL), or run
+   `linode-cli nodebalancers list --text | grep 45.79.61.251`. Replace
+   `NODEBALANCER_ID` in `envoy-gateway/envoyproxy.yaml`.
+3. **Add the missing DNS records** in Linode DNS Manager:
+   `argocd.ephemeral-roles.net` A `45.79.61.251` and AAAA
+   `2600:3c00:1::2d4f:3dfb`. Without them, Let's Encrypt can't validate
+   `argocd` (grafana and jaeger already resolve).
+4. Confirm the NodeBalancer will survive Contour's removal:
+
+   ```sh
+   kubectl -n projectcontour get svc envoy \
+     -o jsonpath='{.metadata.annotations.service\.beta\.kubernetes\.io/linode-loadbalancer-preserve}'; echo   # true
+   ```
+
+Cutover (public HTTP is down for a few minutes between steps 5 and 6):
+
+5. Remove Contour. The `projectcontour` Application isn't in this
+   repository and has no cascade finalizer, so add one, then delete it.
+   This deletes Contour, its Envoy pods and Service (the NodeBalancer is
+   kept), the HTTPProxy CRDs and the `projectcontour` namespace.
+
+   ```sh
+   kubectl -n argocd patch application projectcontour --type merge \
+     -p '{"metadata":{"finalizers":["resources-finalizer.argocd.argoproj.io"]}}'
+   kubectl -n argocd delete application projectcontour
+   kubectl get ns projectcontour     # wait until it's gone
+   ```
+
+6. Land this commit.
+
+After landing:
+
+```sh
+kubectl -n envoy-gateway-system get svc \
+  -l gateway.envoyproxy.io/owning-gateway-name=public   # EXTERNAL-IP 45.79.61.251
+kubectl -n envoy-gateway-system get certificate          # 3 certificates Ready within a few minutes
+curl -sI http://grafana.ephemeral-roles.net/             # 301 to https://
+curl -sI https://grafana.ephemeral-roles.net/login       # 200, valid Let's Encrypt certificate
+curl -sI https://jaeger.ephemeral-roles.net/             # 302 to accounts.google.com
+kubectl -n observability get securitypolicy jaeger-oidc  # Accepted
+argocd login --grpc-web argocd.ephemeral-roles.net
+```
+
+If a certificate stays pending, check `kubectl -n envoy-gateway-system get
+challenges` and `kubectl describe` them. The usual causes are missing DNS or
+the NodeBalancer not having moved yet.
+
+Rollback: revert this commit, then recreate Contour from phase 3 with
+`git show <phase-3-commit>:projectcontour/contour.yaml | kubectl apply -f -`,
+after adding `service.beta.kubernetes.io/linode-loadbalancer-nodebalancer-id`
+to its `envoy` Service so it takes the NodeBalancer back.
+
+## Afterwards
+
+- Mesh the backends (`argocd-server`, `grafana`, `jaeger`) with
+  `linkerd.io/inject: enabled`, so the hop from the Gateway to each backend
+  uses mTLS. Then add Linkerd `AuthorizationPolicy` resources that admit
+  only the Gateway's identity on those ports.
+- Grafana has anonymous viewing enabled in `monitoring/config.jsonnet`
+  (`auth.anonymous`). Keep it only if the dashboards are meant to be public.
+- When cert-manager v1.22 is released (expected to add Kubernetes 1.37),
+  bump `argocd/cert-manager.yaml`.

@@ -22,5 +22,5 @@ kubectl -n "${NAMESPACE}" rollout status --timeout=60s deployment/jaeger-operato
 echo "🚀 Deploying Jaeger"
 kubectl -n "${NAMESPACE}" apply -f "${SCRIPT_DIR}/jaeger.yaml"
 kubectl -n "${NAMESPACE}" apply -f "${SCRIPT_DIR}/service.yaml"
-kubectl -n "${NAMESPACE}" apply -f "${SCRIPT_DIR}/httpproxy.yaml"
+kubectl -n "${NAMESPACE}" apply -f "${SCRIPT_DIR}/httproute.yaml"
 

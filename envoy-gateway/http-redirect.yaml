@@ -1,0 +1,28 @@
+---
+# Redirect plain HTTP to HTTPS for every public host. cert-manager's HTTP-01
+# challenge routes match the exact path /.well-known/acme-challenge/<token>,
+# and in Gateway API an exact path match beats this prefix match, so
+# certificate issuance and renewal still work over HTTP.
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: http-to-https
+  namespace: envoy-gateway-system
+spec:
+  parentRefs:
+    - name: public
+      sectionName: http
+  hostnames:
+    - argocd.ephemeral-roles.net
+    - grafana.ephemeral-roles.net
+    - jaeger.ephemeral-roles.net
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301

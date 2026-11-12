@@ -12,7 +12,7 @@ spec:
   parentRefs:
     - name: public
       namespace: envoy-gateway-system
-      sectionName: http
+      sectionName: https-grafana
   hostnames:
     - grafana.ephemeral-roles.net
   rules:

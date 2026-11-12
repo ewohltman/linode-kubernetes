@@ -36,7 +36,6 @@ build() {
 
   find manifests -type f ! -name '*.yaml' -delete
 
-  cp custom/grafana-httpproxy.yaml manifests
   cp custom/servicemonitor-ephemeral-roles.yaml manifests
 }
 
