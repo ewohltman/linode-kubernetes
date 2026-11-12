@@ -1,0 +1,97 @@
+---
+# cert-manager, installed from the upstream Helm chart. This replaces the
+# hand-applied v1.6.3 static manifests. The release name "cert-manager"
+# matches the labels and selectors of the existing Deployments, so ArgoCD
+# upgrades them in place.
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: v1.21.3
+    helm:
+      releaseName: cert-manager
+      valuesObject:
+        crds:
+          enabled: true
+          keep: true
+        config:
+          apiVersion: controller.config.cert-manager.io/v1alpha1
+          kind: ControllerConfiguration
+          # Lets cert-manager issue certificates for Gateway listeners and
+          # solve HTTP-01 challenges with Gateway API HTTPRoutes.
+          enableGatewayAPI: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+---
+# trust-manager publishes CA bundles (for example, the Linkerd trust anchor)
+# to ConfigMaps in other namespaces.
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: trust-manager
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.jetstack.io
+    chart: trust-manager
+    targetRevision: v0.26.0
+    helm:
+      releaseName: trust-manager
+      valuesObject:
+        crds:
+          enabled: true
+        # Only private CAs are distributed. The public CA package isn't needed.
+        defaultPackage:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+---
+# Issuers and other cert-manager resources kept in this repository.
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: cert-manager-config
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ewohltman/linode-kubernetes.git
+    targetRevision: master
+    path: cert-manager
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      # The issuers can only be created after the cert-manager CRDs exist.
+      - SkipDryRunOnMissingResource=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m

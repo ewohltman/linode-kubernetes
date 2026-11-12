@@ -1,0 +1,49 @@
+---
+# Self-signed issuer used to bootstrap private CAs, such as the Linkerd
+# trust anchor and the Linkerd webhook CA.
+kind: ClusterIssuer
+apiVersion: cert-manager.io/v1
+metadata:
+  name: selfsigned
+spec:
+  selfSigned: {}
+---
+# Let's Encrypt staging. Use it to test new hostnames without using up
+# production rate limits. Its certificates are not browser-trusted.
+kind: ClusterIssuer
+apiVersion: cert-manager.io/v1
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+    solvers:
+      - http01:
+          gatewayHTTPRoute:
+            parentRefs:
+              - kind: Gateway
+                name: public
+                namespace: envoy-gateway-system
+                sectionName: http
+---
+# Let's Encrypt production. HTTP-01 challenges are answered through the
+# "http" listener of the public Envoy Gateway.
+kind: ClusterIssuer
+apiVersion: cert-manager.io/v1
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    solvers:
+      - http01:
+          gatewayHTTPRoute:
+            parentRefs:
+              - kind: Gateway
+                name: public
+                namespace: envoy-gateway-system
+                sectionName: http
