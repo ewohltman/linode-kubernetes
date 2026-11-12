@@ -38,6 +38,24 @@ Before landing:
   kubectl -n cert-manager delete deploy cert-manager cert-manager-cainjector cert-manager-webhook
   ```
 
+- **Remove the v1.6.3 conversion webhook from the cert-manager CRDs.** The
+  old CRDs set `conversion.strategy: Webhook`, pointing at
+  `cert-manager-webhook` `/convert`. The v1.21 CRDs have no conversion
+  section. The old CRDs predate server-side apply and have no field
+  owners, so ArgoCD can't remove the webhook block. The API server then
+  rejects the merged CRD (`spec.conversion.strategy: Required value`), and
+  the issuers lose their Gateway API fields. Every version is `v1` only,
+  so nothing needs converting:
+
+  ```sh
+  for c in certificates.cert-manager.io certificaterequests.cert-manager.io \
+           issuers.cert-manager.io clusterissuers.cert-manager.io \
+           orders.acme.cert-manager.io challenges.acme.cert-manager.io; do
+    kubectl patch crd "$c" --type=merge \
+      -p '{"spec":{"conversion":{"strategy":"None","webhook":null}}}'
+  done
+  ```
+
 After landing:
 
 ```sh
