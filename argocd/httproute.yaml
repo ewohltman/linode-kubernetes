@@ -1,0 +1,20 @@
+---
+# argocd.ephemeral-roles.net through the public Envoy Gateway. TLS ends at
+# the Gateway, so argocd-server runs in insecure (plain HTTP) mode. Use
+# `argocd login --grpc-web argocd.ephemeral-roles.net` with the CLI.
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  parentRefs:
+    - name: public
+      namespace: envoy-gateway-system
+      sectionName: http
+  hostnames:
+    - argocd.ephemeral-roles.net
+  rules:
+    - backendRefs:
+        - name: argocd-server
+          port: 80

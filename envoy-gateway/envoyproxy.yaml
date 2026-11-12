@@ -1,0 +1,28 @@
+---
+# Data-plane settings for the public Gateway.
+kind: EnvoyProxy
+apiVersion: gateway.envoyproxy.io/v1alpha1
+metadata:
+  name: public
+  namespace: envoy-gateway-system
+spec:
+  # Send traffic to Service cluster IPs instead of pod IPs, so that the
+  # Linkerd proxy beside Envoy does the load balancing and applies
+  # Service-level policy.
+  routingType: Service
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 2
+        pod:
+          annotations:
+            linkerd.io/inject: enabled
+            # Internet traffic arrives on the listener container ports
+            # (80 -> 10080, 443 -> 10443). Bypass the Linkerd proxy for it,
+            # so Envoy sees the real client IP.
+            config.linkerd.io/skip-inbound-ports: "10080,10443"
+      envoyService:
+        # Phase 3: reachable only inside the cluster while Contour still
+        # serves public traffic. Phase 4 moves the existing NodeBalancer here.
+        type: ClusterIP

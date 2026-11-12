@@ -1,0 +1,36 @@
+---
+# OpenID Connect login (Google) in front of the Jaeger UI.
+#
+# The client ID and secret come from a Google OAuth client. They aren't
+# stored in this public repository; create the Secret by hand:
+#
+#   kubectl -n observability create secret generic jaeger-oidc \
+#     --from-literal=client-id=<id>.apps.googleusercontent.com \
+#     --from-literal=client-secret=<secret>
+#
+# Who may sign in is controlled in Google Cloud: keep the OAuth consent
+# screen's publishing status at "Testing" and list only the allowed accounts
+# as test users. Until the Secret exists, Envoy Gateway rejects requests to
+# this route, so the UI is never exposed without login.
+kind: SecurityPolicy
+apiVersion: gateway.envoyproxy.io/v1alpha1
+metadata:
+  name: jaeger-oidc
+  namespace: observability
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: jaeger
+  oidc:
+    provider:
+      issuer: https://accounts.google.com
+    clientIDRef:
+      name: jaeger-oidc
+    clientSecret:
+      name: jaeger-oidc
+    redirectURL: https://jaeger.ephemeral-roles.net/oauth2/callback
+    logoutPath: /logout
+    scopes:
+      - openid
+      - email

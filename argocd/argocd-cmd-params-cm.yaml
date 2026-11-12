@@ -1,0 +1,15 @@
+---
+# Parameters for the ArgoCD components (upstream ships this ConfigMap empty).
+# argocd-server serves plain HTTP because TLS ends at the Envoy Gateway.
+# argocd-server only reads this at startup, so restart it after a change:
+#   kubectl -n argocd rollout restart deploy argocd-server
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: argocd-cmd-params-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cmd-params-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  server.insecure: "true"

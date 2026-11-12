@@ -8501,6 +8501,9 @@ metadata:
     # for information about enabling the PROXY protocol on the ELB to recover
     # the original remote IP address.
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+    # Keep the NodeBalancer (45.79.61.251) when this Service is deleted, so
+    # the Envoy Gateway Service can adopt it and keep the same IP.
+    service.beta.kubernetes.io/linode-loadbalancer-preserve: "true"
 spec:
   externalTrafficPolicy: Local
   ports:

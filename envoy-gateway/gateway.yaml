@@ -1,0 +1,26 @@
+---
+# The cluster's single public entry point, replacing Contour.
+kind: Gateway
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: public
+  namespace: envoy-gateway-system
+spec:
+  gatewayClassName: envoy-gateway
+  listeners:
+    # Plain HTTP. Also carries cert-manager's HTTP-01 challenge routes.
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values:
+                  - argocd
+                  - envoy-gateway-system
+                  - monitoring
+                  - observability

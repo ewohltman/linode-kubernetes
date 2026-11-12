@@ -1,0 +1,20 @@
+---
+# jaeger.ephemeral-roles.net through the public Envoy Gateway. Jaeger has no
+# login of its own, so the SecurityPolicy in securitypolicy.yaml puts it
+# behind OIDC.
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: jaeger
+  namespace: observability
+spec:
+  parentRefs:
+    - name: public
+      namespace: envoy-gateway-system
+      sectionName: http
+  hostnames:
+    - jaeger.ephemeral-roles.net
+  rules:
+    - backendRefs:
+        - name: jaeger
+          port: 16686

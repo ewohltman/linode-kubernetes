@@ -1,0 +1,94 @@
+---
+# Gateway API CRDs (v1.6.1, standard channel) and Envoy Gateway's own CRDs.
+# This chart is the single owner of the Gateway API CRDs. Linkerd's charts
+# set installGatewayAPI=false, and the v1.3.0 CRDs Istio left behind are
+# adopted and upgraded in place.
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: gateway-api-crds
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: docker.io/envoyproxy
+    chart: gateway-crds-helm
+    targetRevision: v1.10.0
+    helm:
+      releaseName: gateway-api-crds
+      valuesObject:
+        crds:
+          gatewayAPI:
+            enabled: true
+            channel: standard
+          envoyGateway:
+            enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: envoy-gateway-system
+  syncPolicy:
+    automated:
+      prune: false # never delete CRDs (and every route with them) automatically
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+---
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: envoy-gateway
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: docker.io/envoyproxy
+    chart: gateway-helm
+    targetRevision: v1.10.0
+    helm:
+      releaseName: envoy-gateway
+      # CRDs come from the gateway-api-crds Application.
+      skipCrds: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: envoy-gateway-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m
+---
+# GatewayClass, EnvoyProxy and the public Gateway (envoy-gateway/).
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: envoy-gateway-config
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ewohltman/linode-kubernetes.git
+    targetRevision: master
+    path: envoy-gateway
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: envoy-gateway-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - SkipDryRunOnMissingResource=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m

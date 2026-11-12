@@ -1,0 +1,21 @@
+---
+# grafana.ephemeral-roles.net through the public Envoy Gateway. Grafana has
+# its own login.
+# Not generated: monitoring/generate.sh recreates manifests/, so copy this
+# file back after regenerating.
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  parentRefs:
+    - name: public
+      namespace: envoy-gateway-system
+      sectionName: http
+  hostnames:
+    - grafana.ephemeral-roles.net
+  rules:
+    - backendRefs:
+        - name: grafana
+          port: 3000
