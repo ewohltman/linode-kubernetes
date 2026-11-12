@@ -3,5 +3,6 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: argocd
-  annotations:
-    linkerd.io/inject: enabled
+  # Not meshed: with ArgoCD's upstream NetworkPolicies, meshed traffic
+  # between its components failed (controller -> repo-server and redis),
+  # and ArgoCD manages Linkerd itself. See networkpolicy-linkerd.yaml.
