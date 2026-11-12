@@ -1,0 +1,148 @@
+---
+# Namespaces, identity CA and webhook certificates for Linkerd (linkerd/).
+# This has to sync before the control plane can start, because the
+# control-plane pods mount the Secrets it creates.
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: linkerd-config
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ewohltman/linode-kubernetes.git
+    targetRevision: master
+    path: linkerd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: linkerd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - SkipDryRunOnMissingResource=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m
+---
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: linkerd-crds
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://helm.linkerd.io/edge
+    chart: linkerd-crds
+    targetRevision: 2026.11.1 # edge-26.11.1
+    helm:
+      releaseName: linkerd-crds
+      valuesObject:
+        # Envoy Gateway's gateway-crds-helm chart owns the Gateway API CRDs.
+        installGatewayAPI: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: linkerd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+---
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: linkerd-control-plane
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://helm.linkerd.io/edge
+    chart: linkerd-control-plane
+    targetRevision: 2026.11.1 # edge-26.11.1
+    helm:
+      releaseName: linkerd-control-plane
+      valuesObject:
+        # Don't send anonymous usage data to Buoyant.
+        disableHeartBeat: true
+        identity:
+          # trust-manager creates the linkerd-identity-trust-roots ConfigMap.
+          externalCA: true
+          issuer:
+            # cert-manager creates the linkerd-identity-issuer Secret.
+            scheme: kubernetes.io/tls
+        proxyInjector:
+          externalSecret: true
+          injectCaFrom: linkerd/linkerd-proxy-injector
+        profileValidator:
+          externalSecret: true
+          injectCaFrom: linkerd/linkerd-sp-validator
+        policyValidator:
+          externalSecret: true
+          injectCaFrom: linkerd/linkerd-policy-validator
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: linkerd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m
+---
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: linkerd-viz
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://helm.linkerd.io/edge
+    chart: linkerd-viz
+    targetRevision: 2026.11.1 # edge-26.11.1
+    helm:
+      releaseName: linkerd-viz
+      valuesObject:
+        tap:
+          externalSecret: true
+          injectCaFrom: linkerd-viz/tap
+        tapInjector:
+          externalSecret: true
+          injectCaFrom: linkerd-viz/tap-injector
+        # Viz's bundled Prometheus keeps 6h of data on an emptyDir. Bound it,
+        # because node memory is the tight resource on this cluster.
+        prometheus:
+          resources:
+            cpu:
+              request: 50m
+            memory:
+              request: 256Mi
+              limit: 512Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: linkerd-viz
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
+    retry:
+      limit: 10
+      backoff:
+        duration: 30s
+        factor: 2
+        maxDuration: 10m

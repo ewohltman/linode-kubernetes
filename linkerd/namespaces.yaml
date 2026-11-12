@@ -1,0 +1,22 @@
+---
+# The Linkerd Helm charts don't create their namespaces. These labels and
+# annotations match what `linkerd install` sets.
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: linkerd
+  labels:
+    config.linkerd.io/admission-webhooks: disabled
+    linkerd.io/control-plane-ns: linkerd
+    linkerd.io/is-control-plane: "true"
+    pod-security.kubernetes.io/enforce: privileged
+  annotations:
+    linkerd.io/inject: disabled
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: linkerd-viz
+  labels:
+    linkerd.io/extension: viz
+    pod-security.kubernetes.io/enforce: privileged

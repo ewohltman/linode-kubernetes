@@ -1,0 +1,78 @@
+---
+# Linkerd trust anchor: the root of the mesh's mTLS identity. Let's Encrypt
+# can't issue this, so it's a private CA in cert-manager. The private key is
+# never rotated, so a renewed root keeps validating certificates signed by
+# the old one.
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-trust-anchor
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: root.linkerd.cluster.local
+  secretName: linkerd-trust-anchor
+  duration: 87600h # 10 years
+  renewBefore: 8760h # 1 year
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Never
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigned
+---
+kind: ClusterIssuer
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-trust-anchor
+spec:
+  ca:
+    secretName: linkerd-trust-anchor
+---
+# Linkerd identity issuer: an intermediate CA, signed by the trust anchor,
+# that linkerd-identity uses to issue workload certificates. cert-manager
+# rotates it every day and linkerd-identity reloads it automatically.
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-identity-issuer
+  namespace: linkerd
+spec:
+  isCA: true
+  commonName: identity.linkerd.cluster.local
+  dnsNames:
+    - identity.linkerd.cluster.local
+  secretName: linkerd-identity-issuer
+  duration: 48h
+  renewBefore: 25h
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - cert sign
+    - crl sign
+    - server auth
+    - client auth
+  issuerRef:
+    kind: ClusterIssuer
+    name: linkerd-trust-anchor
+---
+# Publishes the trust anchor certificate (not its key) as the
+# linkerd-identity-trust-roots ConfigMap, which the control plane reads
+# when identity.externalCA is true.
+kind: Bundle
+apiVersion: trust.cert-manager.io/v1alpha1
+metadata:
+  name: linkerd-identity-trust-roots
+spec:
+  sources:
+    - secret:
+        name: linkerd-trust-anchor
+        key: tls.crt
+  target:
+    configMap:
+      key: ca-bundle.crt
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: linkerd

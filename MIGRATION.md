@@ -47,3 +47,46 @@ kubectl -n observability get certificate          # jaeger-operator cert still R
 kubectl get mutatingwebhookconfiguration jaeger-operator-mutating-webhook-configuration \
   -o jsonpath='{.webhooks[0].clientConfig.caBundle}' | head -c 40; echo   # still injected
 ```
+
+## Phase 2: Linkerd through ArgoCD, with cert-manager-issued identity
+
+What changes:
+
+- Linkerd edge-26.11.1 (`linkerd-crds`, `linkerd-control-plane`,
+  `linkerd-viz`) is installed from the Helm charts, managed by ArgoCD.
+- The trust anchor is a cert-manager private CA (10 years, key never
+  rotated). The identity issuer is a 48h intermediate that cert-manager
+  rotates daily. trust-manager publishes the anchor as
+  `linkerd-identity-trust-roots`. This removes the 2027-11-12 expiry of
+  the CLI-generated certificates.
+- Webhook and tap serving certificates come from cert-manager, and
+  cainjector fills in their `caBundle`. With the charts' generated
+  certificates, every ArgoCD render would produce new random ones.
+- The heartbeat CronJob is disabled, and viz's bundled Prometheus gets a
+  512Mi memory limit.
+
+Before landing (phase 1 must be healthy):
+
+The CLI install generated a trust anchor whose private key wasn't kept, so
+cert-manager can't adopt it. Nothing outside `linkerd` and `linkerd-viz` is
+meshed yet, so uninstall and reinstall instead of rotating. Viz has to go
+first, or `linkerd uninstall` prints nothing. Neither command touches the
+Gateway API CRDs.
+
+```sh
+linkerd viz uninstall | kubectl delete -f -
+linkerd uninstall | kubectl delete -f -
+kubectl get ns linkerd linkerd-viz     # wait until both are gone
+```
+
+After landing:
+
+```sh
+kubectl -n linkerd get certificate               # identity + webhook certs Ready
+kubectl -n linkerd get cm linkerd-identity-trust-roots
+linkerd check
+linkerd viz check
+```
+
+If any namespaces were meshed in the meantime, restart their workloads so
+the proxies get certificates from the new trust anchor.

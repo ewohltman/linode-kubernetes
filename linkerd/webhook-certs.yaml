@@ -1,0 +1,128 @@
+---
+# Serving certificates for the Linkerd admission webhooks and the viz tap
+# APIService. The Helm charts generate these randomly on every render,
+# which never settles under ArgoCD, so cert-manager issues them instead.
+# cainjector copies the CA into each webhook (see the charts' injectCaFrom).
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-webhook-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: webhook.linkerd.cluster.local
+  secretName: linkerd-webhook-ca
+  duration: 87600h # 10 years
+  renewBefore: 8760h # 1 year
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Never
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigned
+---
+kind: ClusterIssuer
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-webhook-issuer
+spec:
+  ca:
+    secretName: linkerd-webhook-ca
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-proxy-injector
+  namespace: linkerd
+spec:
+  secretName: linkerd-proxy-injector-k8s-tls
+  dnsNames:
+    - linkerd-proxy-injector.linkerd.svc
+  duration: 720h
+  renewBefore: 240h
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - server auth
+  issuerRef:
+    kind: ClusterIssuer
+    name: linkerd-webhook-issuer
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-sp-validator
+  namespace: linkerd
+spec:
+  secretName: linkerd-sp-validator-k8s-tls
+  dnsNames:
+    - linkerd-sp-validator.linkerd.svc
+  duration: 720h
+  renewBefore: 240h
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - server auth
+  issuerRef:
+    kind: ClusterIssuer
+    name: linkerd-webhook-issuer
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: linkerd-policy-validator
+  namespace: linkerd
+spec:
+  secretName: linkerd-policy-validator-k8s-tls
+  dnsNames:
+    - linkerd-policy-validator.linkerd.svc
+  duration: 720h
+  renewBefore: 240h
+  privateKey:
+    algorithm: ECDSA
+    # The policy controller is written in Rust and only parses PKCS#8 keys.
+    encoding: PKCS8
+  usages:
+    - server auth
+  issuerRef:
+    kind: ClusterIssuer
+    name: linkerd-webhook-issuer
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: tap
+  namespace: linkerd-viz
+spec:
+  secretName: tap-k8s-tls
+  dnsNames:
+    - tap.linkerd-viz.svc
+  duration: 720h
+  renewBefore: 240h
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - server auth
+  issuerRef:
+    kind: ClusterIssuer
+    name: linkerd-webhook-issuer
+---
+kind: Certificate
+apiVersion: cert-manager.io/v1
+metadata:
+  name: tap-injector
+  namespace: linkerd-viz
+spec:
+  secretName: tap-injector-k8s-tls
+  dnsNames:
+    - tap-injector.linkerd-viz.svc
+  duration: 720h
+  renewBefore: 240h
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - server auth
+  issuerRef:
+    kind: ClusterIssuer
+    name: linkerd-webhook-issuer
