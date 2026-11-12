@@ -194,8 +194,8 @@ What changes:
 
 Before landing:
 
-1. Phase 3 is healthy and its port-forward tests pass. The `jaeger-oidc`
-   Secret exists.
+1. Phase 3 is healthy and its port-forward tests pass. The
+   `jaeger-basic-auth` Secret exists.
 2. The NodeBalancer ID in `envoy-gateway/envoyproxy.yaml` is `250811`
    (the NodeBalancer with IP 45.79.61.251).
 3. **Add the missing DNS records** in Linode DNS Manager:
@@ -234,8 +234,9 @@ kubectl -n envoy-gateway-system get svc \
 kubectl -n envoy-gateway-system get certificate          # 3 certificates Ready within a few minutes
 curl -sI http://grafana.ephemeral-roles.net/             # 301 to https://
 curl -sI https://grafana.ephemeral-roles.net/login       # 200, valid Let's Encrypt certificate
-curl -sI https://jaeger.ephemeral-roles.net/             # 302 to accounts.google.com
-kubectl -n observability get securitypolicy jaeger-oidc  # Accepted
+curl -sI https://jaeger.ephemeral-roles.net/             # 401
+curl -sI -u "jaeger:$PASS" https://jaeger.ephemeral-roles.net/   # 200
+kubectl -n observability get securitypolicy jaeger-basic-auth   # Accepted
 argocd login --grpc-web argocd.ephemeral-roles.net
 ```
 

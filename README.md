@@ -12,7 +12,7 @@ automatically (app-of-apps).
 | [`linkerd/`](linkerd)              | Linkerd namespaces, cert-manager identity CA and webhook certificates |
 | [`envoy-gateway/`](envoy-gateway)  | GatewayClass, EnvoyProxy and the `public` Gateway (HTTPS, Let's Encrypt) |
 | [`monitoring/`](monitoring)        | kube-prometheus (generated) and the Grafana route                     |
-| [`observability/`](observability)  | Jaeger, its route and its OIDC SecurityPolicy                         |
+| [`observability/`](observability)  | Jaeger, its route and its basic-auth SecurityPolicy                   |
 
 Public hosts, all HTTPS through the Envoy Gateway on 45.79.61.251:
 `argocd`, `grafana` and `jaeger` under `ephemeral-roles.net`.
