@@ -1,36 +1,29 @@
 ---
-# OpenID Connect login (Google) in front of the Jaeger UI.
+# HTTP basic auth in front of the Jaeger UI, which has no login of its own.
 #
-# The client ID and secret come from a Google OAuth client. They aren't
-# stored in this public repository; create the Secret by hand:
+# The users file isn't stored in this public repository; create the Secret
+# by hand. Envoy Gateway only accepts the unsalted {SHA} (SHA-1) htpasswd
+# format, so use a long random password that isn't used anywhere else:
 #
-#   kubectl -n observability create secret generic jaeger-oidc \
-#     --from-literal=client-id=<id>.apps.googleusercontent.com \
-#     --from-literal=client-secret=<secret>
+#   PASS=$(openssl rand -base64 24)
+#   HASH=$(printf '%s' "$PASS" | openssl dgst -binary -sha1 | openssl base64)
+#   kubectl -n observability create secret generic jaeger-basic-auth \
+#     --from-literal=.htpasswd="jaeger:{SHA}$HASH"
+#   echo "jaeger / $PASS"    # keep this in a password manager
 #
-# Who may sign in is controlled in Google Cloud: keep the OAuth consent
-# screen's publishing status at "Testing" and list only the allowed accounts
-# as test users. Until the Secret exists, Envoy Gateway rejects requests to
-# this route, so the UI is never exposed without login.
+# Until the Secret exists (or if it's malformed), Envoy Gateway answers this
+# route with 500, so the UI is never exposed without a password. Basic auth
+# sends the password with every request; it's only safe over HTTPS (phase 4).
 kind: SecurityPolicy
 apiVersion: gateway.envoyproxy.io/v1alpha1
 metadata:
-  name: jaeger-oidc
+  name: jaeger-basic-auth
   namespace: observability
 spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: jaeger
-  oidc:
-    provider:
-      issuer: https://accounts.google.com
-    clientIDRef:
-      name: jaeger-oidc
-    clientSecret:
-      name: jaeger-oidc
-    redirectURL: https://jaeger.ephemeral-roles.net/oauth2/callback
-    logoutPath: /logout
-    scopes:
-      - openid
-      - email
+  basicAuth:
+    users:
+      name: jaeger-basic-auth
