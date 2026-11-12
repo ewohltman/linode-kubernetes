@@ -121,7 +121,7 @@ What changes:
   `routingType: Service`.
 - HTTPRoutes for argocd, grafana and jaeger attach to the Gateway's `http`
   listener, beside the existing HTTPProxies.
-- Jaeger gets a Google OIDC SecurityPolicy. Until its Secret exists, Envoy
+- Jaeger gets a basic-auth SecurityPolicy. Until its Secret exists, Envoy
   Gateway answers that route with 500, so it fails closed.
 - argocd-server switches to insecure mode (`server.insecure: "true"`),
   because TLS will end at the Gateway.
@@ -130,20 +130,20 @@ What changes:
 
 Before landing:
 
-1. Create the Google OAuth client for Jaeger:
-   - Google Cloud console → APIs & Services → OAuth consent screen: user
-     type *External*, publishing status *Testing*, and add each account
-     allowed to sign in as a *test user*. Only test users can sign in while
-     the app is in Testing.
-   - Credentials → Create OAuth client ID → *Web application*, with the
-     authorized redirect URI `https://jaeger.ephemeral-roles.net/oauth2/callback`.
-2. Store it in the cluster. It is never committed:
+1. Create Jaeger's basic-auth users file as a Secret. It is never
+   committed. Envoy Gateway only accepts the unsalted `{SHA}` htpasswd
+   format, so use a long random password that isn't used anywhere else:
 
    ```sh
-   kubectl -n observability create secret generic jaeger-oidc \
-     --from-literal=client-id=<id>.apps.googleusercontent.com \
-     --from-literal=client-secret=<secret>
+   PASS=$(openssl rand -base64 24)
+   HASH=$(printf '%s' "$PASS" | openssl dgst -binary -sha1 | openssl base64)
+   kubectl -n observability create secret generic jaeger-basic-auth \
+     --from-literal=.htpasswd="jaeger:{SHA}$HASH"
+   echo "jaeger / $PASS"    # keep this in a password manager
    ```
+
+   The Secret can also be created later. Until then the Jaeger route
+   returns 500.
 
 After landing:
 
@@ -173,7 +173,8 @@ SVC=$(kubectl -n envoy-gateway-system get svc -o name \
 kubectl -n envoy-gateway-system port-forward "$SVC" 8080:80 &
 curl -sI -H 'Host: grafana.ephemeral-roles.net' localhost:8080/login   # 200
 curl -sI -H 'Host: argocd.ephemeral-roles.net' localhost:8080/          # 200
-curl -sI -H 'Host: jaeger.ephemeral-roles.net' localhost:8080/          # 302 to accounts.google.com
+curl -sI -H 'Host: jaeger.ephemeral-roles.net' localhost:8080/          # 401 (500 until the Secret exists)
+curl -sI -u "jaeger:$PASS" -H 'Host: jaeger.ephemeral-roles.net' localhost:8080/   # 200
 ```
 
 ## Phase 4: cut over to Envoy Gateway, HTTPS everywhere, remove Contour

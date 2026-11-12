@@ -17,7 +17,7 @@ Routes live with the applications they expose:
 |-------------------------------|--------------------------------------------------|----------------------------------|
 | `argocd.ephemeral-roles.net`  | `argocd/httproute.yaml`                          | `argocd-server:80` (insecure mode) |
 | `grafana.ephemeral-roles.net` | `monitoring/manifests/grafana-httproute.yaml`    | `grafana:3000`                   |
-| `jaeger.ephemeral-roles.net`  | `observability/httproute.yaml`                   | `jaeger:16686`, behind Google OIDC |
+| `jaeger.ephemeral-roles.net`  | `observability/httproute.yaml`                   | `jaeger:16686`, behind basic auth |
 
 To publish a new host:
 
