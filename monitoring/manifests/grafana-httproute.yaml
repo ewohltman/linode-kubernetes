@@ -8,6 +8,11 @@ apiVersion: gateway.networking.k8s.io/v1
 metadata:
   name: grafana
   namespace: monitoring
+  annotations:
+    # The monitoring Application applies server-side but diffs client-side,
+    # so fields the API server defaults (group, kind, weight, the default
+    # path match) would show as drift. Diff server-side for this route.
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
 spec:
   parentRefs:
     - name: public

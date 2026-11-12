@@ -48,6 +48,13 @@ spec:
       releaseName: envoy-gateway
       # CRDs come from the gateway-api-crds Application.
       skipCrds: true
+      valuesObject:
+        crds:
+          # The chart also renders the Gateway API safe-upgrades
+          # ValidatingAdmissionPolicy and binding as templates (not CRDs).
+          # gateway-api-crds owns them; rendering them here too makes both
+          # Applications claim them (SharedResourceWarning).
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: envoy-gateway-system
