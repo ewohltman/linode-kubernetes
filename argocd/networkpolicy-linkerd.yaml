@@ -7,8 +7,12 @@
 #   the node's IP, hence 0.0.0.0/0. With native sidecars, a proxy that
 #   can't pass its probe would keep the app container from starting.
 # - 4190 (tap), from linkerd-viz only.
-# Meshed application traffic still arrives on the original application
-# ports, which the upstream policies already cover.
+# - 4143 (proxy inbound). When both ends are meshed, the client's proxy
+#   delivers to the target pod's proxy on 4143, not to the application
+#   port, so the upstream per-port policies would drop all meshed traffic
+#   between ArgoCD components (the controller couldn't reach the repo
+#   server). Allowed from ArgoCD's own pods, the Envoy Gateway data plane
+#   and linkerd-viz. Linkerd authorization policies can narrow this further.
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
@@ -29,6 +33,17 @@ spec:
         - port: 4190
           protocol: TCP
       from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: linkerd-viz
+    - ports:
+        - port: 4143
+          protocol: TCP
+      from:
+        - podSelector: {}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: envoy-gateway-system
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: linkerd-viz
