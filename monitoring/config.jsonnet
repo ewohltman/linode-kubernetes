@@ -83,7 +83,9 @@ local kp =
         },
       };
 
-{ 'setup/0namespace-namespace': kp.kubePrometheus.namespace } +
+// Mesh the monitoring namespace with Linkerd (node-exporter uses hostNetwork
+// and is skipped by the injector automatically).
+{ 'setup/0namespace-namespace': kp.kubePrometheus.namespace + { metadata+: { annotations+: { 'linkerd.io/inject': 'enabled' } } } } +
 {
   ['setup/prometheus-operator-' + name]: kp.prometheusOperator[name]
   for name in std.filter((function(name) name != 'serviceMonitor' && name != 'prometheusRule'), std.objectFields(kp.prometheusOperator))
