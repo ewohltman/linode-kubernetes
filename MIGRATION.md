@@ -240,6 +240,35 @@ kubectl -n observability get securitypolicy jaeger-basic-auth   # Accepted
 argocd login --grpc-web argocd.ephemeral-roles.net
 ```
 
+Observed during the 2026-11-12 cutover:
+
+- Public HTTP was down for about 54 seconds, between deleting the
+  `projectcontour` Application and Envoy Gateway adopting the NodeBalancer.
+- cert-manager starts ordering certificates as soon as phase 3's Gateway
+  annotation exists, while Contour still answers on the public IPs. Let's
+  Encrypt (validating over IPv6) failed the first attempts, and cert-manager
+  then backs off for about an hour. To retry at once, delete the failed
+  Certificates. The Gateway owns them, so cert-manager recreates them
+  straight away; they were issued in under 30 seconds:
+
+  ```sh
+  kubectl -n envoy-gateway-system delete certificate \
+    grafana-ephemeral-roles-net-tls jaeger-ephemeral-roles-net-tls
+  ```
+
+- Deleting the `projectcontour` Application with the cascade finalizer did
+  not remove Contour's 5 CRDs, and the `monitoring` Application (no prune)
+  kept its old `grafana-httpproxy`. Delete the CRDs, which also removes any
+  remaining HTTPProxies:
+
+  ```sh
+  kubectl get crd -o name | grep projectcontour.io | xargs kubectl delete
+  ```
+
+- A listener whose certificate can't be issued (for example `https-argocd`
+  with no DNS record) is `Programmed=False`, and `envoy-gateway-config`
+  shows Degraded until it is. The other listeners are unaffected.
+
 If a certificate stays pending, check `kubectl -n envoy-gateway-system get
 challenges` and `kubectl describe` them. The usual causes are missing DNS or
 the NodeBalancer not having moved yet.
