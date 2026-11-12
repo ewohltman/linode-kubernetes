@@ -177,10 +177,8 @@ Before landing:
 
 1. Phase 3 is healthy and its port-forward tests pass. The `jaeger-oidc`
    Secret exists.
-2. **Fill in the NodeBalancer ID.** Find it in Cloud Manager → NodeBalancers
-   → the one with IP 45.79.61.251 (the ID is in its URL), or run
-   `linode-cli nodebalancers list --text | grep 45.79.61.251`. Replace
-   `NODEBALANCER_ID` in `envoy-gateway/envoyproxy.yaml`.
+2. The NodeBalancer ID in `envoy-gateway/envoyproxy.yaml` is `250811`
+   (the NodeBalancer with IP 45.79.61.251).
 3. **Add the missing DNS records** in Linode DNS Manager:
    `argocd.ephemeral-roles.net` A `45.79.61.251` and AAAA
    `2600:3c00:1::2d4f:3dfb`. Without them, Let's Encrypt can't validate
@@ -206,7 +204,8 @@ Cutover (public HTTP is down for a few minutes between steps 5 and 6):
    kubectl get ns projectcontour     # wait until it's gone
    ```
 
-6. Land this commit.
+6. Land the phase 4 commit and the commit after it, which sets the
+   NodeBalancer ID.
 
 After landing:
 

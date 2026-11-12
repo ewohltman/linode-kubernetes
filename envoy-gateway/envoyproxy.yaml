@@ -29,6 +29,6 @@ spec:
         annotations:
           # Adopt the NodeBalancer Contour used, so the public IPs
           # (45.79.61.251 and 2600:3c00:1::2d4f:3dfb) and DNS stay the same.
-          service.beta.kubernetes.io/linode-loadbalancer-nodebalancer-id: "NODEBALANCER_ID"
+          service.beta.kubernetes.io/linode-loadbalancer-nodebalancer-id: "250811"
           # Never delete the NodeBalancer (and lose the IPs) with this Service.
           service.beta.kubernetes.io/linode-loadbalancer-preserve: "true"
