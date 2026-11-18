@@ -20,6 +20,18 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-staging-account-key
     solvers:
+      # The wildcard certificate for the https-wildcard listener. Let's
+      # Encrypt only issues wildcards over DNS-01, answered in Linode DNS by
+      # cert-manager-webhook-linode (argocd/cert-manager.yaml). The selector
+      # is more specific than the HTTP-01 solver below, so it wins for this
+      # name only.
+      - selector:
+          dnsNames:
+            - "*.ephemeral-roles.net"
+        dns01:
+          webhook:
+            groupName: acme.slicen.me
+            solverName: linode
       - http01:
           gatewayHTTPRoute:
             parentRefs:
@@ -29,7 +41,8 @@ spec:
                 sectionName: http
 ---
 # Let's Encrypt production. HTTP-01 challenges are answered through the
-# "http" listener of the public Envoy Gateway.
+# "http" listener of the public Envoy Gateway, and DNS-01 challenges for the
+# wildcard certificate in Linode DNS.
 kind: ClusterIssuer
 apiVersion: cert-manager.io/v1
 metadata:
@@ -40,6 +53,18 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod-account-key
     solvers:
+      # The wildcard certificate for the https-wildcard listener. Let's
+      # Encrypt only issues wildcards over DNS-01, answered in Linode DNS by
+      # cert-manager-webhook-linode (argocd/cert-manager.yaml). The selector
+      # is more specific than the HTTP-01 solver below, so it wins for this
+      # name only.
+      - selector:
+          dnsNames:
+            - "*.ephemeral-roles.net"
+        dns01:
+          webhook:
+            groupName: acme.slicen.me
+            solverName: linode
       - http01:
           gatewayHTTPRoute:
             parentRefs:

@@ -13,5 +13,10 @@ installed from their Helm charts by the Applications in
 
 The Let's Encrypt issuers solve HTTP-01 challenges with a Gateway API
 HTTPRoute attached to the `http` listener of the `public` Gateway in
-`envoy-gateway-system`. No ACME account email is configured, because Let's
+`envoy-gateway-system`. The one exception is `*.ephemeral-roles.net`, which
+Let's Encrypt only issues over DNS-01. Those challenges are answered in Linode
+DNS by [cert-manager-webhook-linode](https://github.com/linode/cert-manager-webhook-linode)
+(solver group `acme.slicen.me`), installed by an Application in
+`argocd/cert-manager.yaml`. Its Linode API token (Domains read/write) is the
+hand-made `linode-credentials` Secret (key `token`) in `cert-manager`. No ACME account email is configured, because Let's
 Encrypt no longer sends expiry emails.
