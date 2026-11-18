@@ -8,8 +8,8 @@ the Applications in [`argocd/envoy-gateway.yaml`](../argocd/envoy-gateway.yaml).
 |---------------------|-----------------------------------------------------------------------------|
 | `gatewayclass.yaml` | `envoy-gateway` GatewayClass, parameterized by the `public` EnvoyProxy      |
 | `envoyproxy.yaml`   | Data plane: 2 Envoy replicas, Linkerd-injected, Service routing, LoadBalancer adopting the existing NodeBalancer |
-| `gateway.yaml`      | `public` Gateway: `http` listener plus one HTTPS listener per host, with Let's Encrypt certificates |
-| `http-redirect.yaml`| Redirects HTTP to HTTPS (ACME challenges still take precedence)              |
+| `gateway.yaml`      | `public` Gateway: `http` listener, one HTTPS listener per named host, and an `https-wildcard` listener, with Let's Encrypt certificates |
+| `http-redirect.yaml`| Redirects HTTP to HTTPS for `*.ephemeral-roles.net` (ACME challenges still take precedence) |
 
 Routes live with the applications they expose:
 
@@ -19,12 +19,24 @@ Routes live with the applications they expose:
 | `grafana.ephemeral-roles.net` | `monitoring/manifests/grafana-httproute.yaml`    | `grafana:3000`                   |
 | `jaeger.ephemeral-roles.net`  | `observability/httproute.yaml`                   | `jaeger:16686`, behind basic auth |
 
-To publish a new host:
+To publish a new `<name>.ephemeral-roles.net` host, use the wildcard. A
+`*.ephemeral-roles.net` DNS record already points at the Gateway, and the
+wildcard certificate and HTTP redirect already cover the host.
+
+1. Label the app's namespace:
+   `kubectl label ns <namespace> ephemeral-roles.net/public-gateway=true`.
+2. Add an HTTPRoute in that namespace with `sectionName: https-wildcard` and
+   `hostnames: [<name>.ephemeral-roles.net]`.
+
+The wildcard covers one label only: not the apex `ephemeral-roles.net` and
+not `a.b.ephemeral-roles.net`. A host that needs its own certificate, or a
+listener limited to a single namespace like argocd, grafana and jaeger, gets
+a named listener instead:
 
 1. Add a DNS A/AAAA record pointing at 45.79.61.251 / 2600:3c00:1::2d4f:3dfb.
 2. Add an HTTPS listener for it to `gateway.yaml`, with its own
    `certificateRefs` Secret and an `allowedRoutes` selector for the app's
-   namespace. Add the host to `http-redirect.yaml`.
+   namespace.
 3. Add an HTTPRoute in the app's namespace with `sectionName` set to the
    new listener.
 

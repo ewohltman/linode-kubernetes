@@ -1,5 +1,5 @@
 ---
-# Redirect plain HTTP to HTTPS for every public host. cert-manager's HTTP-01
+# Redirect plain HTTP to HTTPS for every subdomain of ephemeral-roles.net. cert-manager's HTTP-01
 # challenge routes match the exact path /.well-known/acme-challenge/<token>,
 # and in Gateway API an exact path match beats this prefix match, so
 # certificate issuance and renewal still work over HTTP.
@@ -13,9 +13,7 @@ spec:
     - name: public
       sectionName: http
   hostnames:
-    - argocd.ephemeral-roles.net
-    - grafana.ephemeral-roles.net
-    - jaeger.ephemeral-roles.net
+    - "*.ephemeral-roles.net"
   rules:
     - matches:
         - path:

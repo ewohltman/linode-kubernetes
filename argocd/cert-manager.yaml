@@ -67,6 +67,44 @@ spec:
     syncOptions:
       - ServerSideApply=true
 ---
+# DNS-01 solver for Linode DNS, used by the Let's Encrypt issuers for the
+# *.ephemeral-roles.net wildcard certificate. The chart is only published as
+# a release tarball, so it is taken from the git tag. It reads the Linode API
+# token (Domains read/write) from the linode-credentials Secret in
+# cert-manager, which is created by hand and not kept in this repository:
+#
+#   kubectl -n cert-manager create secret generic linode-credentials \
+#     --from-literal=token=<TOKEN>
+kind: Application
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: cert-manager-webhook-linode
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/linode/cert-manager-webhook-linode.git
+    targetRevision: v0.4.1
+    path: deploy/cert-manager-webhook-linode
+    helm:
+      releaseName: cert-manager-webhook-linode
+      valuesObject:
+        # Must match groupName in the issuers' dns01.webhook solver.
+        api:
+          groupName: acme.slicen.me
+        # The chart defaults to :latest with pullPolicy Always. v0.4.0 was a
+        # broken release, so pin the image to the chart's tag.
+        image:
+          tag: v0.4.1
+          pullPolicy: IfNotPresent
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
 # Issuers and other cert-manager resources kept in this repository.
 kind: Application
 apiVersion: argoproj.io/v1alpha1

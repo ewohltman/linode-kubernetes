@@ -3,8 +3,14 @@
 #
 # cert-manager creates one Let's Encrypt certificate per HTTPS listener
 # (its certificateRefs Secret, in this namespace) and renews it
-# automatically. Each HTTPS listener accepts routes only from the namespace
-# of the application it serves.
+# automatically. Each named-host HTTPS listener accepts routes only from the
+# namespace of the application it serves.
+#
+# https-wildcard serves any other single-label subdomain of
+# ephemeral-roles.net to namespaces labelled
+# ephemeral-roles.net/public-gateway=true. A more specific hostname always
+# wins in Gateway API, so the named-host listeners above it keep their hosts
+# and those hosts can't be claimed through the wildcard.
 kind: Gateway
 apiVersion: gateway.networking.k8s.io/v1
 metadata:
@@ -65,3 +71,17 @@ spec:
           selector:
             matchLabels:
               kubernetes.io/metadata.name: observability
+    - name: https-wildcard
+      protocol: HTTPS
+      port: 443
+      hostname: "*.ephemeral-roles.net"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: wildcard-ephemeral-roles-net-tls
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              ephemeral-roles.net/public-gateway: "true"
